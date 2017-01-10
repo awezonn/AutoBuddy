@@ -16,7 +16,6 @@ namespace AutoBuddy.Humanizers
             lastChat = 0;
         }
 
-
         public static void Ping(PingCategory cat, Vector3 pos)
         {
             if (MainMenu.GetMenu("AB").Get<CheckBox>("disablepings").CurrentValue) return;
@@ -35,9 +34,11 @@ namespace AutoBuddy.Humanizers
 
         public static void SayChat(string msg)
         {
+            if (msg == "/ff") goto say;
             if (MainMenu.GetMenu("AB").Get<CheckBox>("disablechat").CurrentValue) return;
             if (lastChat > Game.Time) return;
             lastChat = Game.Time + .8f;
+            say:
             Core.DelayAction(() => Chat.Say(msg), RandGen.r.Next(150, 400));
         }
     }

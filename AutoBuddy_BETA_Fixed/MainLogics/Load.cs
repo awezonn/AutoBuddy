@@ -29,8 +29,6 @@ namespace AutoBuddy.MainLogics
             startTime = Game.Time + waitTime + RandGen.r.NextFloat(-10, 20);
             if (MainMenu.GetMenu("AB").Get<CheckBox>("debuginfo").CurrentValue)
                 Drawing.OnDraw += Drawing_OnDraw;
-            if (!AutoWalker.p.Name.Equals("Challenjour Ryze"))
-                Chat.OnMessage += Chat_OnMessage;
             MainMenu.GetMenu("AB").Get<CheckBox>("reselectlane").OnValueChange += Checkbox_OnValueChange;
             MainMenu.GetMenu("AB").Get<Slider>("lane").OnValueChange += Slider_OnValueChange;
         }
@@ -99,7 +97,7 @@ namespace AutoBuddy.MainLogics
             {
                 if (AutoWalker.p.Gold < 550 && MainMenu.GetMenu("AB").Get<CheckBox>("mid").CurrentValue)
                 {
-                    Vector3 p =
+                    var p =
                         ObjectManager.Get<Obj_AI_Turret>()
                             .First(tur => tur.IsAlly && tur.Name.EndsWith("C_05_A"))
                             .Position;
@@ -108,14 +106,17 @@ namespace AutoBuddy.MainLogics
                         RandGen.r.Next(1500, 3000));
                     Core.DelayAction(() => SafeFunctions.SayChat("mid"), RandGen.r.Next(200, 1000));
                     AutoWalker.SetMode(Orbwalker.ActiveModes.Combo);
-                    AutoWalker.WalkTo(p.Extend(AutoWalker.MyNexus, 200 + RandGen.r.NextFloat(0, 100)).To3DWorld().Randomized());
+                    AutoWalker.WalkTo(
+                        p.Extend(AutoWalker.MyNexus, 200 + RandGen.r.NextFloat(0, 100)).To3DWorld().Randomized());
                 }
 
 
                 CanSelectLane();
             }
             else
+            {
                 SelectMostPushedLane();
+            }
         }
 
         public void Deactivate()
@@ -125,60 +126,24 @@ namespace AutoBuddy.MainLogics
         private void CanSelectLane()
         {
             waiting = true;
-            status = "looking for free lane, time left " + (int)(startTime - Game.Time);
+            status = "Looking for free lane, time left " + (int)(startTime - Game.Time);
             if (Game.Time > startTime || GetChampLanes().All(cl => cl.lane != Lane.Unknown))
             {
                 waiting = false;
                 SelectLane();
             }
             else
+            {
                 Core.DelayAction(CanSelectLane, 500);
-        }
-
-        private void Chat_OnMessage(AIHeroClient sender, ChatMessageEventArgs args)
-        {
-
-            if (!args.Message.StartsWith("<font color=\"#40c1ff\">Challenjour Ryze")) return;
-            if (args.Message.Contains("have fun"))
-                Core.DelayAction(() => Chat.Say("gl hf"), RandGen.r.Next(2000, 4000));
-            if (args.Message.Contains("hello"))
-                Core.DelayAction(() => Chat.Say("hi Christian"), RandGen.r.Next(2000, 4000));
-            if (args.Message.Contains("Which")||args.Message.Contains("Whats"))
-                Core.DelayAction(() => Chat.Say(Assembly.GetExecutingAssembly().GetName().Version.Revision.ToString()), RandGen.r.Next(2000, 4000));
-            if (args.Message.Contains("go top please."))
-            {
-                Core.DelayAction(() => Chat.Say("kk"), RandGen.r.Next(1000, 2000));
-                Core.DelayAction(() => SelectLane2(Lane.Top), RandGen.r.Next(2500, 4000));
             }
-            if (args.Message.Contains("go mid please."))
-            {
-                Core.DelayAction(() => Chat.Say("ok"), RandGen.r.Next(1000, 2000));
-                Core.DelayAction(() => SelectLane2(Lane.Mid), RandGen.r.Next(2500, 4000));
-            }
-            if (args.Message.Contains("go bot please."))
-            {
-                Core.DelayAction(() => Chat.Say("k"), RandGen.r.Next(1000, 2000));
-                Core.DelayAction(() => SelectLane2(Lane.Bot), RandGen.r.Next(2500, 4000));
-            }
-            if (args.Message.Contains("go where you want."))
-            {
-                Core.DelayAction(() => Chat.Say("yes sir"), RandGen.r.Next(1000, 2000));
-                Core.DelayAction(SelectLane, RandGen.r.Next(2500, 4000));
-            }
-            if (args.Message.Contains("Thank you"))
-            {
-                Core.DelayAction(() => Chat.Say("np"), RandGen.r.Next(1000, 2000));
-                Core.DelayAction(SelectLane, RandGen.r.Next(2500, 4000));
-            }
-
         }
 
         private void SelectMostPushedLane()
         {
             status = "selected most pushed lane";
-            Obj_HQ nMyNexus = ObjectManager.Get<Obj_HQ>().First(hq => hq.IsEnemy);
+            var nMyNexus = ObjectManager.Get<Obj_HQ>().First(hq => hq.IsEnemy);
 
-            Obj_AI_Minion andrzej =
+            var andrzej =
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(min => min.Name.Contains("Minion") && min.IsAlly && min.Health > 0)
                     .OrderBy(min => min.Distance(nMyNexus))
@@ -294,7 +259,7 @@ namespace AutoBuddy.MainLogics
         private void SelectLane()
         {
             status = "selected free lane";
-            List<ChampLane> list = GetChampLanes();
+            var list = GetChampLanes();
             if (list.All(cl => cl.lane != Lane.Mid))
             {
                 currentLogic.pushLogic.Reset(
@@ -322,24 +287,24 @@ namespace AutoBuddy.MainLogics
 
         private static List<ChampLane> GetChampLanes(float maxDistance = 2000, float maxDistanceFront = 3000)
         {
-            Obj_AI_Turret top1 =
+            var top1 =
                 ObjectManager.Get<Obj_AI_Turret>().First(tur => tur.IsAlly && tur.Name.EndsWith("L_03_A"));
-            Obj_AI_Turret top2 =
+            var top2 =
                 ObjectManager.Get<Obj_AI_Turret>().First(tur => tur.IsAlly && tur.Name.EndsWith("L_02_A"));
-            Obj_AI_Turret mid1 =
+            var mid1 =
                 ObjectManager.Get<Obj_AI_Turret>().First(tur => tur.IsAlly && tur.Name.EndsWith("C_05_A"));
-            Obj_AI_Turret mid2 =
+            var mid2 =
                 ObjectManager.Get<Obj_AI_Turret>().First(tur => tur.IsAlly && tur.Name.EndsWith("C_04_A"));
-            Obj_AI_Turret bot1 =
+            var bot1 =
                 ObjectManager.Get<Obj_AI_Turret>().First(tur => tur.IsAlly && tur.Name.EndsWith("R_03_A"));
-            Obj_AI_Turret bot2 =
+            var bot2 =
                 ObjectManager.Get<Obj_AI_Turret>().First(tur => tur.IsAlly && tur.Name.EndsWith("R_02_A"));
 
-            List<ChampLane> ret = new List<ChampLane>();
+            var ret = new List<ChampLane>();
 
-            foreach (AIHeroClient h in EntityManager.Heroes.Allies.Where(hero => hero.IsAlly && !hero.IsMe))
+            foreach (var h in EntityManager.Heroes.Allies.Where(hero => hero.IsAlly && !hero.IsMe))
             {
-                Lane lane = Lane.Unknown;
+                var lane = Lane.Unknown;
                 if (h.Distance(top1) < maxDistanceFront || h.Distance(top2) < maxDistance) lane = Lane.Top;
                 if (h.Distance(mid1) < maxDistanceFront || h.Distance(mid2) < maxDistance) lane = Lane.Mid;
                 if (h.Distance(bot1) < maxDistanceFront || h.Distance(bot2) < maxDistance) lane = Lane.Bot;

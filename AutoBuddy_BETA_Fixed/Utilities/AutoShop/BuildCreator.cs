@@ -28,16 +28,16 @@ namespace AutoBuddy.Utilities.AutoShop
 
         private readonly CheckBox toDefault;
 
-        public BuildCreator(Menu parentMenu, string dir, string build="")
+        public BuildCreator(Menu parentMenu, string dir, string build = "")
         {
             sugBuild = build;
             property = typeof(CheckBox).GetProperty("Position");
 
 
             string specialPath = null;
-         
-           specialPath = SandboxConfig.DataDirectory + "AutoBuddy\\Builds\\";
-           
+
+            specialPath = SandboxConfig.DataDirectory + "AutoBuddy\\Builds\\";
+
 
             // OLD buildFile = Path.Combine(specialPath + "\\" + AutoWalker.p.ChampionName + "-" + Game.MapId + ".txt");
             buildFile = Path.Combine(specialPath + AutoWalker.p.ChampionName + "-" + Game.MapId + ".txt");
@@ -57,10 +57,10 @@ namespace AutoBuddy.Utilities.AutoShop
 
 
 
-            Menu info = parentMenu.AddSubMenu("Shop-instructions");
-            toDefault=new CheckBox("Delete custom build and set default ADC build", false);
+            var info = parentMenu.AddSubMenu("Shop-instructions");
+            toDefault = new CheckBox("Delete custom build and set default ADC build", false);
 
-            PropertyInfo property2 = typeof(CheckBox).GetProperty("Size");
+            var property2 = typeof(CheckBox).GetProperty("Size");
 
             property2.GetSetMethod(true).Invoke(toDefault, new object[] { new Vector2(400, 25) });
             info.Add("defbuild", toDefault);
@@ -110,7 +110,7 @@ you can copy/share them.
         {
             if (!args.NewValue) return;
 
-            
+
             Core.DelayAction(() => { toDefault.CurrentValue = false; }, 200);
             Reset();
             LoadBuild();
@@ -118,28 +118,28 @@ you can copy/share them.
 
         private void Reset()
         {
-            if(File.Exists(buildFile))
+            if (File.Exists(buildFile))
                 File.Delete(buildFile);
-            foreach (BuildElement buildElement in myBuild)
+            foreach (var buildElement in myBuild)
             {
                 buildElement.Remove(menu);
             }
             myBuild.Clear();
         }
 
-        private void AddElement(LoLItem it, ShopActionType ty)
+        private void AddElement(IItem it, ShopActionType ty)
         {
             if (ty != ShopActionType.Buy || ty != ShopActionType.Sell)
             {
-                int hp = myBuild.Count(e => e.action == ShopActionType.StartHpPot) -
+                var hp = myBuild.Count(e => e.action == ShopActionType.StartHpPot) -
                          myBuild.Count(e => e.action == ShopActionType.StopHpPot);
                 if (ty == ShopActionType.StartHpPot && hp != 0) return;
                 if (ty == ShopActionType.StopHpPot && hp == 0) return;
             }
 
-            BuildElement b = new BuildElement(this, menu, it, myBuild.Any() ? myBuild.Max(a => a.position) + 1 : 1, ty);
+            var b = new BuildElement(this, menu, it, myBuild.Any() ? myBuild.Max(a => a.position) + 1 : 1, ty);
 
-            List<LoLItem> c = new List<LoLItem>();
+            var c = new List<IItem>();
             BrutalItemInfo.InventorySimulator(myBuild, c);
             b.cost = BrutalItemInfo.InventorySimulator(new List<BuildElement> { b }, c);
             b.freeSlots = 7 - c.Count;
@@ -155,8 +155,8 @@ you can copy/share them.
 
         private void LoadBuild()
         {
-           if (!File.Exists(buildFile))
-              
+            if (!File.Exists(buildFile))
+
             {
                 Chat.Print("Custom build doesn't exist: " + buildFile);
                 if (!sugBuild.Equals(string.Empty))
@@ -167,14 +167,14 @@ you can copy/share them.
             }
             try
             {
-                string s = File.ReadAllText(buildFile);
+                var s = File.ReadAllText(buildFile);
                 if (s.Equals(string.Empty))
                 {
                     Chat.Print("AutoBuddy: the build is empty.");
                     LoadInternalBuild();
                     return;
                 }
-                foreach (ItemAction ac in DeserializeBuild(s))
+                foreach (var ac in DeserializeBuild(s))
                 {
                     AddElement(BrutalItemInfo.GetItemByID(ac.item), ac.t);
                     Console.Write("Custom Build Loading ");
@@ -184,7 +184,7 @@ you can copy/share them.
             catch (Exception e)
             {
                 Chat.Print("AutoBuddy: couldn't load the build.");
-              
+
                 LoadInternalBuild();
                 Console.WriteLine(e.Message);
             }
@@ -200,7 +200,7 @@ you can copy/share them.
                     Chat.Print("AutoBuddy: internal build is empty.");
                     return;
                 }
-                foreach (ItemAction ac in DeserializeBuild(sugBuild))
+                foreach (var ac in DeserializeBuild(sugBuild))
                 {
                     AddElement(BrutalItemInfo.GetItemByID(ac.item), ac.t);
                 }
@@ -220,21 +220,21 @@ you can copy/share them.
 
         private string SerializeBuild()
         {
-            string s = string.Empty;
-            foreach (BuildElement el in myBuild.OrderBy(el => el.position))
+            var s = string.Empty;
+            foreach (var el in myBuild.OrderBy(el => el.position))
             {
-                s += el.item.id + ":" + el.action + ",";
+                s += el.item.Id + ":" + el.action + ",";
             }
             return s.Equals(string.Empty) ? s : s.Substring(0, s.Length - 1);
         }
 
         private IEnumerable<ItemAction> DeserializeBuild(string serialized)
         {
-            List<ItemAction> b = new List<ItemAction>();
-            foreach (string s in serialized.Split(','))
+            var b = new List<ItemAction>();
+            foreach (var s in serialized.Split(','))
             {
-                ItemAction ac = new ItemAction { item = -1 };
-                foreach (string s2 in s.Split(':'))
+                var ac = new ItemAction { item = -1 };
+                foreach (var s2 in s.Split(':'))
                 {
                     if (ac.item == -1)
                         ac.item = int.Parse(s2);
@@ -250,7 +250,7 @@ you can copy/share them.
         {
             if (!MainMenu.IsVisible) return;
             property.GetSetMethod(true).Invoke(enabled, new object[] { l.Position + new Vector2(433, 0) });
-            foreach (BuildElement ele in myBuild)
+            foreach (var ele in myBuild)
             {
                 ele.UpdatePos(new Vector2(l.Position.X, l.Position.Y + 10));
             }
@@ -259,14 +259,14 @@ you can copy/share them.
         public void MoveUp(int index)
         {
             if (index <= 2) return;
-            BuildElement th = myBuild.First(ele => ele.position == index);
-            BuildElement up = myBuild.First(ele => ele.position == index - 1);
+            var th = myBuild.First(ele => ele.position == index);
+            var up = myBuild.First(ele => ele.position == index - 1);
             th.position--;
             up.position++;
 
-            foreach (BuildElement el in myBuild.OrderBy(b => b.position))
+            foreach (var el in myBuild.OrderBy(b => b.position))
             {
-                List<LoLItem> c = new List<LoLItem>();
+                var c = new List<IItem>();
                 BrutalItemInfo.InventorySimulator(myBuild, c, el.position - 1);
                 el.cost = BrutalItemInfo.InventorySimulator(new List<BuildElement> { el }, c);
                 el.freeSlots = 7 - c.Count;
@@ -278,8 +278,8 @@ you can copy/share them.
         public void MoveDown(int index)
         {
             if (index == myBuild.Count || index == 2) return;
-            BuildElement th = myBuild.First(ele => ele.position == index);
-            BuildElement dn = myBuild.First(ele => ele.position == index + 1);
+            var th = myBuild.First(ele => ele.position == index);
+            var dn = myBuild.First(ele => ele.position == index + 1);
             th.position++;
             dn.position--;
 
@@ -289,15 +289,15 @@ you can copy/share them.
         public bool Remove(int index)
         {
             if (myBuild.Count > 1 && index == 1) return false;
-            BuildElement th = myBuild.First(ele => ele.position == index);
+            var th = myBuild.First(ele => ele.position == index);
             myBuild.Remove(th);
             th.Remove(menu);
-            foreach (BuildElement el in myBuild.OrderBy(b => b.position).Where(b => b.position > index))
+            foreach (var el in myBuild.OrderBy(b => b.position).Where(b => b.position > index))
             {
                 el.position--;
 
 
-                List<LoLItem> c = new List<LoLItem>();
+                var c = new List<IItem>();
                 BrutalItemInfo.InventorySimulator(myBuild, c, el.position - 1);
                 el.cost = BrutalItemInfo.InventorySimulator(new List<BuildElement> { el }, c);
                 el.freeSlots = 7 - c.Count;
@@ -314,11 +314,11 @@ you can copy/share them.
             if (args.Input.ToLower().StartsWith("/b "))
             {
                 args.Process = false;
-                string itemName = args.Input.Substring(2);
-                LoLItem i = BrutalItemInfo.FindBestItem(itemName);
-                Chat.Print("Buy " + i.name);
+                var itemName = args.Input.Substring(2);
+                var i = BrutalItemInfo.FindBestItem(itemName);
+                Chat.Print("Buy " + i.Name);
 
-                if (myBuild.Count == 0 && !i.groups.Equals("RelicBase"))
+                if (myBuild.Count == 0 && !i.ItemGroupsHasRelicBase())
                 {
                     AddElement(BrutalItemInfo.GetItemByID(3340), ShopActionType.Buy);
                     Chat.Print("Added also warding totem.");
@@ -329,9 +329,9 @@ you can copy/share them.
             else if (args.Input.ToLower().StartsWith("/s "))
             {
                 args.Process = false;
-                string itemName = args.Input.Substring(2);
-                LoLItem i = BrutalItemInfo.FindBestItemAll(itemName);
-                Chat.Print("Sell " + i.name);
+                var itemName = args.Input.Substring(2);
+                var i = BrutalItemInfo.FindBestItemAll(itemName);
+                Chat.Print("Sell " + i.Name);
 
                 AddElement(i, ShopActionType.Sell);
                 SaveBuild();

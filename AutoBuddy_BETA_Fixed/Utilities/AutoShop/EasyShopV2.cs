@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoBuddy.Humanizers;
 using EloBuddy;
@@ -17,7 +18,7 @@ namespace AutoBuddy.Utilities.AutoShop
 
     public static class ShopGlobals
     {
-        public static int GoldForNextItem=999999;
+        public static int GoldForNextItem = 999999;
         public static string Next;
     }
 
@@ -34,11 +35,10 @@ namespace AutoBuddy.Utilities.AutoShop
             Shopping();
         }
 
-
         private void Shopping()
         {
-            List<LoLItem> myit = BrutalItemInfo.MyItems();
-            if (!first&&(!enabled.CurrentValue || !ObjectManager.Player.IsInShopRange() || !buildElements.Any()))
+            var myit = BrutalItemInfo.MyItems();
+            if (!first && (!enabled.CurrentValue || !ObjectManager.Player.IsInShopRange() || !buildElements.Any()))
             {
                 first = true;
                 Core.DelayAction(Shopping, 300);
@@ -46,27 +46,30 @@ namespace AutoBuddy.Utilities.AutoShop
             }
 
             ShopGlobals.GoldForNextItem = 9999999;
-            int currentPos = BrutalItemInfo.GetNum(buildElements);
+            var currentPos = BrutalItemInfo.GetNum(buildElements);
             if (currentPos == -1)
                 ShopGlobals.Next = "Inventories mismatch, won't buy any items";
-            if (currentPos == 0)
+            if (currentPos == 0) // Run when currentPos is 0
             {
-                if (!myit.Any())
+                if (!myit.Any()) // Run when we have no items
                 {
-                    Shop.BuyItem(buildElements.First(el => el.position == 1).item.id);
+                    if (Shop.CanShop)
+                    {
+                        Shop.BuyItem(buildElements.First(el => el.position == 1).item.Id);
+                    }
                     Core.DelayAction(Shopping, 800);
                     return;
                 }
             }
-            if (currentPos + 2 > buildElements.Count)
+            if (currentPos + 2 > buildElements.Count) // Run when inventory is full of what needed
             {
                 Core.DelayAction(Shopping, RandGen.r.Next(400, 800));
                 return;
             }
 
-            if (buildElements.First(b => b.position == currentPos + 2).action != ShopActionType.Buy)
+            if (buildElements.First(b => b.position == currentPos + 2).action != ShopActionType.Buy) // Run when next action is not buy
                 foreach (
-                    BuildElement buildElement in
+                    var buildElement in
                         buildElements.Where(b => b.position > currentPos + 1).OrderBy(b => b.position).ToList())
                 {
                     if (buildElement.action == ShopActionType.Buy || buildElement.action == ShopActionType.Sell) break;
@@ -78,18 +81,21 @@ namespace AutoBuddy.Utilities.AutoShop
                         return;
                     }
                 }
-            
 
-            if (currentPos < buildElements.Count - 1)
+
+            if (currentPos < buildElements.Count - 1) // Run if we have slots to buy
             {
-                BuildElement b = buildElements.First(el => el.position == currentPos + 2);
+                var b = buildElements.First(el => el.position == currentPos + 2);
                 if (b.action == ShopActionType.Sell)
                 {
-                    int slot = BrutalItemInfo.GetItemSlot(buildElements.First(el => el.position == currentPos + 2).item.id);
+                    var slot = BrutalItemInfo.GetItemSlot(buildElements.First(el => el.position == currentPos + 2).item.Id);
                     if (slot != -1)
                     {
-                        Shop.SellItem(slot);
-                        
+                        if (Shop.CanShop)
+                        {
+                            Shop.SellItem(slot); 
+                        }
+
                     }
                     else
                     {
@@ -99,9 +105,12 @@ namespace AutoBuddy.Utilities.AutoShop
 
                 if (b.action == ShopActionType.Buy)
                 {
-                    ShopGlobals.Next = b.item.name;
+                    ShopGlobals.Next = b.item.Name;
                     ShopGlobals.GoldForNextItem = BrutalItemInfo.BuyItemSim(myit, b.item);
-                    Shop.BuyItem(b.item.id);
+                    if (Shop.CanShop)
+                    {
+                        Shop.BuyItem(b.item.Id); 
+                    }
                 }
 
             }
@@ -110,17 +119,19 @@ namespace AutoBuddy.Utilities.AutoShop
             Core.DelayAction(() =>
             {
                 if (currentPos == -1) return;
-                List<BuildElement> cur = buildElements.Where(b => b.position < currentPos+2).ToList();
+                var cur = buildElements.Where(b => b.position < currentPos + 2).ToList();
 
-                int hp = cur.Count(e => e.action == ShopActionType.StartHpPot) -
+                var hp = cur.Count(e => e.action == ShopActionType.StartHpPot) -
                          cur.Count(e => e.action == ShopActionType.StopHpPot);
                 if (hp > 0 && !AutoWalker.p.InventoryItems.Any(it => it.Id.IsHealthlyConsumable()))
-                    Shop.BuyItem(ItemId.Health_Potion);
+                    if (Shop.CanShop)
+                        Shop.BuyItem(ItemId.Health_Potion);
                 else if (hp <= 0)
                 {
-                    int slot = BrutalItemInfo.GetHealtlyConsumableSlot();
+                    var slot = BrutalItemInfo.GetHealtlyConsumableSlot();
                     if (slot != -1)
-                       Shop.SellItem(slot);
+                        if (Shop.CanShop)
+                            Shop.SellItem(slot);
                 }
             }
                 , 150);

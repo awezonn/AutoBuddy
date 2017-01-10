@@ -14,7 +14,7 @@ namespace AutoBuddy.Utilities
         public LocalAwareness()
         {
             heroTable = new List<HeroInfo>();
-            foreach (AIHeroClient h in EntityManager.Heroes.AllHeroes)
+            foreach (var h in EntityManager.Heroes.AllHeroes)
             {
                 if (h.IsMe)
                 {
@@ -31,7 +31,7 @@ namespace AutoBuddy.Utilities
         {
             float danger = 0;
             foreach (
-                HeroInfo h in
+                var h in
                     heroTable.Where(
                         hh => hh.hero.IsVisible() && !hh.hero.IsDead() && hh.hero.Position.Distance(pos) < 900))
             {
@@ -49,7 +49,7 @@ namespace AutoBuddy.Utilities
 
             }
             foreach (
-                Obj_AI_Minion tt in
+                var tt in
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(min => min.Health > 0 && min.Distance(pos) < 550+AutoWalker.p.BoundingRadius))
             {

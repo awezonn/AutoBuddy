@@ -26,7 +26,7 @@ namespace AutoBuddy.Utilities.Pathfinder
             navGraph = graph;
             f.Read(b, 0, 4);
             Neighbors = new int[BitConverter.ToInt32(b, 0)];
-            for (int i = 0; i < Neighbors.Length; i++)
+            for (var i = 0; i < Neighbors.Length; i++)
             {
                 f.Read(b, 0, 4);
                 Neighbors[i] = BitConverter.ToInt32(b, 0);
@@ -45,7 +45,7 @@ namespace AutoBuddy.Utilities.Pathfinder
         public void Serialize(FileStream f)
         {
             f.Write(BitConverter.GetBytes(Neighbors.Length), 0, 4);
-            foreach (int neighbor in Neighbors)
+            foreach (var neighbor in Neighbors)
             {
                 f.Write(BitConverter.GetBytes(neighbor), 0, 4);
             }
@@ -61,16 +61,16 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public void AddNeighbor(int neighbor)
         {
-            int[] tmp = new int[Neighbors.Length + 1];
+            var tmp = new int[Neighbors.Length + 1];
             Neighbors.CopyTo(tmp, 0);
             Neighbors = tmp;
             Neighbors[Neighbors.Length - 1] = neighbor;
         }
         public void RemoveNeighbor(int neighbor)
         {
-            int[] tmp = new int[Neighbors.Length - 1];
-            int index = 0;
-            for (int i = 0; i < Neighbors.Length; i++)
+            var tmp = new int[Neighbors.Length - 1];
+            var index = 0;
+            for (var i = 0; i < Neighbors.Length; i++)
             {
                 if (Neighbors[i] != neighbor) continue;
                 index = i;
@@ -90,10 +90,10 @@ namespace AutoBuddy.Utilities.Pathfinder
         }
         public void DrawLinks()
         {
-            bool onscreen = position.IsOnScreen();
-            foreach (int i in Neighbors)
+            var onscreen = position.IsOnScreen();
+            foreach (var i in Neighbors)
             {
-                Node n = navGraph.Nodes[i];
+                var n = navGraph.Nodes[i];
                 if (onscreen || n.position.IsOnScreen())
                     Line.DrawLine(navGraph.LineColor, 1f, position, n.position);
             }

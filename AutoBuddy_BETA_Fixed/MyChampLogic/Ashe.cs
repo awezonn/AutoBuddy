@@ -8,73 +8,85 @@ namespace AutoBuddy.MyChampLogic
 {
     internal class Ashe : IChampLogic
     {
-        public float MaxDistanceForAA { get { return int.MaxValue; } }
-        public float OptimalMaxComboDistance { get { return AutoWalker.p.AttackRange; } }
-        public float HarassDistance { get { return AutoWalker.p.AttackRange; } }
-
+        public float MaxDistanceForAA => AutoWalker.p.AttackRange;
+        public float OptimalMaxComboDistance => 20000;
+        public float HarassDistance => AutoWalker.p.AttackRange * 2;
 
         public Spell.Active Q;
         public Spell.Skillshot W, E, R;
+        public float UltDamage;
 
         public Ashe()
         {
-            skillSequence = new[] {2, 1, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3};
-            ShopSequence =
-                "3340:Buy,1036:Buy,2003:StartHpPot,1053:Buy,1042:Buy,1001:Buy,3006:Buy,1036:Buy,1038:Buy,3072:Buy,2003:StopHpPot,1042:Buy,1051:Buy,3086:Buy,1042:Buy,1042:Buy,1043:Buy,3085:Buy,2015:Buy,3086:Buy,3094:Buy,1018:Buy,1038:Buy,3031:Buy,1037:Buy,3035:Buy,3033:Buy";
-            Q = new Spell.Active(SpellSlot.Q);
+            SkillSequence = new[] {2, 1, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3};
+            ShopSequence = "1055:Buy,2003:StartHpPot,3340:Buy,1051:Buy,1042:Buy,3086:Buy,1042:Buy,1042:Buy,1043:Buy,3085:Buy,1001:Buy,1042:Buy,3006:Buy,1018:Buy,1037:Buy,2003:StopHpPot,1038:Buy,3031:Buy,1036:Buy,1053:Buy,1036:Buy,1055:Sell,1038:Buy,3072:Buy,1036:Buy,1036:Buy,3133:Buy,1038:Buy,3508:Buy,1037:Buy,3035:Buy,3033:Buy";
+            Q = new Spell.Active(SpellSlot.Q, 4294967295, DamageType.Physical);
             W = new Spell.Skillshot(SpellSlot.W, 1200, SkillShotType.Cone);
-            E = new Spell.Skillshot(SpellSlot.E, 2500, SkillShotType.Linear);
-            R = new Spell.Skillshot(SpellSlot.R, 3000, SkillShotType.Linear, 250, 1600, 130)
+            E = new Spell.Skillshot(SpellSlot.E, 20000, SkillShotType.Linear);
+            R = new Spell.Skillshot(SpellSlot.R, 20000, SkillShotType.Linear, 250, 1600, 130)
             {
                 MinimumHitChance = HitChance.Medium,
-                AllowedCollisionCount = 99
+                AllowedCollisionCount = 1
             };
-            Game.OnTick += Game_OnTick;
+            UltDamage = new[] {0f, 200f, 400f, 600f}[R.Level] + AutoWalker.p.TotalMagicalDamage;
+            Game.OnUpdate += Game_OnUpdate;
         }
 
-        public int[] skillSequence { get; private set; }
+        private void Game_OnUpdate(System.EventArgs args)
+        {
+            foreach (var enemy in EntityManager.Heroes.Enemies)
+            {
+                if (!enemy.IsVisible || enemy.IsDead) continue;
+
+                if (AutoWalker.p.CalculateDamageOnUnit(enemy, DamageType.Magical, UltDamage) > enemy.Health)
+                    R.CastMinimumHitchance(enemy, HitChance.High);
+            }
+        }
+
+        public int[] SkillSequence { get; private set; }
         public LogicSelector Logic { get; set; }
 
         public string ShopSequence { get; private set; }
 
         public void Harass(AIHeroClient target)
         {
+            if (target.Distance(AutoWalker.p) < W.Range)
+            {
+                W.Cast(target);
+            }
         }
 
         public void Survi()
         {
-            if (R.IsReady() || W.IsReady())
+            if (R.IsReady() || W.IsReady() || Q.IsReady())
             {
-                AIHeroClient chaser =
+                var chaser =
                     EntityManager.Heroes.Enemies.FirstOrDefault(
                         chase => chase.Distance(AutoWalker.p) < 600 && chase.IsVisible());
                 if (chaser != null)
                 {
-                    if (R.IsReady() && AutoWalker.p.HealthPercent() > 18)
-                        R.Cast(chaser);
                     if (W.IsReady())
                         W.Cast(chaser);
+                    else if (Q.IsReady())
+                        Q.Cast(Player.Instance);
+                    else if (R.IsReady() && AutoWalker.p.HealthPercent() < 18)
+                        R.Cast(chaser);
                 }
             }
         }
 
         public void Combo(AIHeroClient target)
         {
-            if (R.IsReady() && target.HealthPercent() < 25 && AutoWalker.p.Distance(target) > 600 &&
-                AutoWalker.p.Distance(target) < 1600 && target.IsVisible())
-                R.Cast(target);
-        }
-
-        private void Game_OnTick(System.EventArgs args)
-        {
-            if (!R.IsReady()) return;
-            AIHeroClient vic =
-                EntityManager.Heroes.Enemies.FirstOrDefault(
-                    v => v.IsVisible() &&
-                         v.Health < AutoWalker.p.GetSpellDamage(v, SpellSlot.R) && v.Distance(AutoWalker.p) > 700 &&
-                         AutoWalker.p.Distance(v) < 2500);
-            if (vic == null) return;
-            R.Cast(vic);
+            if (R.IsReady() && AutoWalker.p.CalculateDamageOnUnit(target, DamageType.Magical, UltDamage) > target.Health && AutoWalker.p.Distance(target) < 1600 && target.IsVisible())
+                R.CastMinimumHitchance(target, 65);
+            else if (AutoWalker.p.IsInAutoAttackRange(target) && Q.CanCast(AutoWalker.p))
+            {
+                Q.Cast(AutoWalker.p);
+            }
+            if (W.IsInRange(target))
+            {
+                W.CastMinimumHitchance(target, 65);
+            }
         }
     }
 }

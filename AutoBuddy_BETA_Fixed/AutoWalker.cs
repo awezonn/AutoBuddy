@@ -21,7 +21,6 @@ namespace AutoBuddy
 {
     internal static class AutoWalker
     {
-        public static string GameID;
         public static bool HasHeal, HasBarrier, HasGhost, HasFlash, HasTeleport, HasIgnite, HasSmite, HasExhaust;
         public static Spell.Active Ghost, Barrier, Heal, Recall;
         public static Spell.Skillshot Flash;
@@ -46,7 +45,6 @@ namespace AutoBuddy
         public static EventHandler EndGame;
         static AutoWalker()
         {
-            GameID = DateTime.Now.Ticks + ""+RandomString(10);
             newPF = MainMenu.GetMenu("AB").Get<CheckBox>("newPF").CurrentValue;
             NavGraph=new NavGraph(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy"));
             PfNodes=new List<Vector3>();
@@ -81,14 +79,8 @@ namespace AutoBuddy
             updateItems();
             oldOrbwalk();
             Game.OnTick += OnTick;
-            Chat.OnMessage += Chat_OnMessage;
             Drawing.OnDraw += Drawing_OnDraw;
-
-
         }
-
-
-        
 
         public static bool Recalling()
         {
@@ -97,7 +89,6 @@ namespace AutoBuddy
 
         private static void OnEndGame()
         {
-
             if (MyNexus != null && EneMyNexus != null && (MyNexus.Health > 1) && (EneMyNexus.Health > 1))
             {
                 Core.DelayAction(OnEndGame, 5000);
@@ -108,49 +99,13 @@ namespace AutoBuddy
                 EndGame(null, new EventArgs());
 
             if (MainMenu.GetMenu("AB").Get<CheckBox>("autoclose").CurrentValue)
-                Core.DelayAction(() =>
-                {
-                    /* foreach (Process process in Process.GetProcessesByName("League of Legends"))
-                     {
-                         process.CloseMainWindow();
-                     } */     
-                      Game.QuitGame(); // new close game from API 6.5       
-
-                }, 14000);
+                Core.DelayAction(() => Game.QuitGame(), 5000);
         }
 
         public static Vector3 Target { get; private set; }
 
-
-
-        private static void Chat_OnMessage(AIHeroClient sender, ChatMessageEventArgs args)
-        {
-            //Debug only
-            /*if (sender.IsMe && args.Message.Contains("heal"))
-            {
-                AutoWalker.UseHeal();
-            }
-            if (sender.IsMe && args.Message.Contains("ghost"))
-            {
-                AutoWalker.UseGhost();
-            }
-            if (sender.IsMe && args.Message.Contains("barrier"))
-            {
-                AutoWalker.UseBarrier();
-            }
-            if (sender.IsMe && args.Message.Contains("ignite"))
-            {
-                AutoWalker.UseIgnite();
-            }
-			*/
-
-        }
-
-
         private static void Game_OnUpdate(EventArgs args)
         {
-            
-
             if (activeMode == Orbwalker.ActiveModes.LaneClear)
             {
                 Orbwalker.ActiveModesFlags = (p.TotalAttackDamage < 150 &&
@@ -175,7 +130,7 @@ namespace AutoBuddy
         private static void Drawing_OnDraw(EventArgs args)
         {
             Circle.Draw(color,40, Target );
-            for (int i = 0; i < PfNodes.Count-1; i++)
+            for (var i = 0; i < PfNodes.Count-1; i++)
             {
                 if(PfNodes[i].IsOnScreen()||PfNodes[i+1].IsOnScreen())
                     Line.DrawLine(Color.Aqua, 4, PfNodes[i], PfNodes[i+1]);
@@ -185,8 +140,6 @@ namespace AutoBuddy
 
         public static void WalkTo(Vector3 tgt)
         {
-
-            
             if (!newPF)
             {
                 Target = tgt;
@@ -195,7 +148,7 @@ namespace AutoBuddy
 
             if (PfNodes.Any())
             {
-                float dist = tgt.Distance(PfNodes[PfNodes.Count - 1]);
+                var dist = tgt.Distance(PfNodes[PfNodes.Count - 1]);
                 if ( dist>900|| dist > 300&&p.Distance(tgt)<2000)
                 {
                     PfNodes = NavGraph.FindPathRandom(p.Position, tgt);
@@ -221,9 +174,6 @@ namespace AutoBuddy
             
         }
 
-
-
-
         private static void updateItems()
         {
             hpSlot = BrutalItemInfo.GetHPotionSlot();
@@ -238,7 +188,7 @@ namespace AutoBuddy
         }
         public static void UseGhost()
         {
-            if (HasGhost == true && Ghost.IsReady())
+            if (HasGhost && Ghost.IsReady())
             {
                 Ghost.Cast();
             }   
@@ -246,24 +196,25 @@ namespace AutoBuddy
         public static void UseHPot()
         {
             updateItems();
-            if (!Player.HasBuff("RegenerationPotion"))
+            if (Player.HasBuff("RegenerationPotion") || ObjectManager.Player.IsInFountainRange())
             {
-                updateItems();
-                if (hpSlot == -1) return;
-                p.InventoryItems[hpSlot].Cast();
-                hpSlot = -1;
+                return;
             }
+            updateItems();
+            if (hpSlot == -1) return;
+            p.InventoryItems[hpSlot].Cast();
+            hpSlot = -1;
         }
         public static void UseBarrier()
         {
-            if (HasBarrier == true && Barrier.IsReady())
+            if (HasBarrier && Barrier.IsReady())
             {
                 Barrier.Cast();
             }
         }
         public static void UseHeal()
         {
-            if (HasHeal == true && Heal.IsReady())
+            if (HasHeal && Heal.IsReady())
             {
                 Heal.Cast();
             }
@@ -339,9 +290,7 @@ namespace AutoBuddy
 
 
         }
-
-
-
+        
         #region old orbwalking, for those with not working orbwalker
 
         private static int maxAdditionalTime = 50;
@@ -374,20 +323,18 @@ namespace AutoBuddy
             var timex = Game.CursorPos.X;
             var timey = Game.CursorPos.Y;
 
-            string TimeString = Time.ToString();
+            var TimeString = Time.ToString();
             Drawing.DrawText(200, 200, Color.Aqua, TimeString);
         }
 
 
-    private static void OnTick(EventArgs args)
+        private static void OnTick(EventArgs args)
         {
             var turret = ObjectManager.Get<Obj_HQ>().First(tur => tur.IsAlly && tur.Name.Contains("HQ_T"));
 
             if (Player.Instance.IsInRange(turret, 2700))
             {
-
                 Time++;
-                
             }
             else
             {
@@ -407,13 +354,9 @@ namespace AutoBuddy
             
             if (TimeStuck/30 >= 100)
             {
-                Chat.Print("Closing game because your stuck :/");
+                Chat.Print("Closing game because you're stuck :/");
                 Game.QuitGame();
             }
-           
-            
-            
-
 
             if (PfNodes.Count != 0)
             {
@@ -428,13 +371,10 @@ namespace AutoBuddy
 
 
 
-            if (!oldWalk||ObjectManager.Player.Position.Distance(Target) < holdRadius || Game.Time < nextMove) return;
+            if (!oldWalk || ObjectManager.Player.Position.Distance(Target) < holdRadius || Game.Time < nextMove) return;
             nextMove = Game.Time + movementDelay;
             Player.IssueOrder(GameObjectOrder.MoveTo, Target, true);
         }
-            
-
-    
         
         public static string RandomString(int length)
         {
@@ -447,9 +387,4 @@ namespace AutoBuddy
     }
 
 #endregion
-
-
-
-
-
 }

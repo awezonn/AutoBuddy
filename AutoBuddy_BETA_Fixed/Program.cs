@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using AutoBuddy.Humanizers;
 using AutoBuddy.MainLogics;
 using AutoBuddy.MyChampLogic;
-using AutoBuddy.Utilities;
 using AutoBuddy.Utilities.AutoLvl;
 using AutoBuddy.Utilities.AutoShop;
 using EloBuddy;
@@ -16,16 +13,12 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using SharpDX;
-using Version = System.Version;
 
 namespace AutoBuddy
 {
     internal static class Program
     {
-        private static AIHeroClient myHero
-        {
-            get { return Player.Instance; }
-        }
+        private static AIHeroClient myHero => Player.Instance;
         private static Menu menu;
         private static string loadTextureDir = SandboxConfig.DataDirectory + "AutoBuddy\\";
         private static IChampLogic myChamp;
@@ -38,7 +31,7 @@ namespace AutoBuddy
             if (File.Exists(loadTextureDir + "loadTexture"))
             {
                 Hacks.DisableTextures = true;
-                ManagedTexture.OnLoad += (args) => { args.Process = false; };
+                ManagedTexture.OnLoad += args => { args.Process = false; };
             }
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
         }
@@ -58,24 +51,27 @@ namespace AutoBuddy
             
             //STILL BROKEN ;(
             //createFS();
-            Version v = Assembly.GetExecutingAssembly().GetName().Version;
-            string ABVersion = v.Major + "." + v.MajorRevision + "." + v.Minor + "." + v.MinorRevision;
+            var v = Assembly.GetExecutingAssembly().GetName().Version;
+            var ABVersion = $"{v.Major}.{v.MajorRevision}.{v.Minor}.{v.MinorRevision}";
 
             Chat.Print("AutoBuddy:", System.Drawing.Color.White);
-            Chat.Print("Loaded Version: " + ABVersion, System.Drawing.Color.LimeGreen);
+            Chat.Print($"Loaded Version: {ABVersion}", System.Drawing.Color.LimeGreen);
             Chat.Print("AutoBuddy: Starting in 5 seconds.");
-            Core.DelayAction(Start, 5000);
+            var startTime = Game.Time < 13 ? (13000 - (int)(Game.Time * 1000) < 5000 ? 5000 : 13000 - (int)(Game.Time * 1000)) : 5000;
+            Core.DelayAction(Start, startTime);
             menu = MainMenu.AddMenu("AUTOBUDDY", "AB");
             menu.Add("sep1", new Separator(1));
-            CheckBox c =
-                new CheckBox("Call mid, will leave if other player stays on mid(only auto lane)", true);
-            PropertyInfo property2 = typeof(CheckBox).GetProperty("Size");
+            var c = new CheckBox("Call mid, will leave if other player stays on mid(only auto lane)");
+            var property2 = typeof(CheckBox).GetProperty("Size");
             property2.GetSetMethod(true).Invoke(c, new object[] { new Vector2(500, 20) });
             menu.Add("mid", c);
-            Slider s = menu.Add("lane", new Slider(" ", 1, 1, 4));
+            var s = menu.Add("lane", new Slider(" ", 1, 1, 4));
             string[] lanes =
             {
-                "", "Selected lane: Auto", "Selected lane: Top", "Selected lane: Mid",
+                "",
+                "Selected lane: Auto",
+                "Selected lane: Top",
+                "Selected lane: Mid",
                 "Selected lane: Bot"
             };
             s.DisplayName = lanes[s.CurrentValue];
@@ -85,35 +81,35 @@ namespace AutoBuddy
                     sender.DisplayName = lanes[changeArgs.NewValue];
                 };
             menu.Add("reselectlane", new CheckBox("Reselect lane", false));
-            menu.Add("disablepings", new CheckBox("Disable pings", false));
-            menu.Add("disablechat", new CheckBox("Disable chat", false));
-            CheckBox newpf = new CheckBox("Use smart pathfinder", true);
+            menu.Add("disablepings", new CheckBox("Disable pings"));
+            menu.Add("disablechat", new CheckBox("Disable chat"));
+            var newpf = new CheckBox("Use smart pathfinder");
             menu.Add("newPF", newpf);
-            Slider hpValue = menu.Add("HPPot", new Slider("Minimum HP% to use Health Pot?", 43, 1, 100));
+            var hpValue = menu.Add("HPPot", new Slider("Minimum HP% to use Health Pot?", 40, 1));
             hpvaluePot = hpValue.CurrentValue;
             hpValue.OnValueChange +=
-                delegate(ValueBase<int> sender, ValueBase<int>.ValueChangeArgs changeArgs)
+                delegate 
                 {
                     hpvaluePot = hpValue.CurrentValue;
                 };
             newpf.OnValueChange += newpf_OnValueChange;
             menu.AddSeparator(10);
             menu.AddLabel("Turn on to improve RAM usage.");
-            CheckBox noTextures = new CheckBox("Don't load textures. Restart LoL to apply.");
+            var noTextures = new CheckBox("Don't load textures. Restart LoL to apply.");
             menu.Add("noTextures", noTextures);
             noTextures.OnValueChange += noTextures_OnValueChange;
             menu.Add("sep2", new Separator(10));
             menu.AddLabel("Champ will follow cursor. DON'T turn on if you are botting!");
             menu.Add("disableAutoBuddy", new CheckBox("Disable AutoBuddy Movement. F5 to apply.", false));
             menu.AddSeparator(5);
-            CheckBox autoclose = new CheckBox("Auto close lol when the game ends. F5 to apply", false);
+            var autoclose = new CheckBox("Auto close lol when the game ends. F5 to apply");
             property2.GetSetMethod(true).Invoke(autoclose, new object[] { new Vector2(500, 20) });
             menu.Add("autoclose", autoclose);
             menu.AddSeparator(5);
             menu.Add("oldWalk", new CheckBox("Use old orbwalking. F5 to apply", false));
-            menu.Add("debuginfo", new CheckBox("Draw debug info. F5 to apply", true));
-            menu.Add("l1", new Label("By Christian Brutal Sniper - Maintained by TheYasuoMain"));
-            menu.Add("l2", new Label("Version: " + ABVersion));
+            menu.Add("debuginfo", new CheckBox("Draw debug info. F5 to apply"));
+            menu.Add("l1", new Label("By Christian Brutal Sniper - Was maintained by TheYasuoMain - Now maintaned by FurkanS"));
+            menu.Add("l2", new Label($"Version: {ABVersion}"));
         }
 
         static void newpf_OnValueChange(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
@@ -129,14 +125,14 @@ namespace AutoBuddy
                 {
                     Directory.CreateDirectory(loadTextureDir);
                 }
-                if (MainMenu.GetMenu("AB").Get<CheckBox>("noTextures").CurrentValue == true)
+                if (MainMenu.GetMenu("AB").Get<CheckBox>("noTextures").CurrentValue)
                 {
                     if (!File.Exists(loadTextureDir + "loadTexture"))
                     {
                         File.Create(loadTextureDir + "loadTexture");
                     }
                 }
-                if (MainMenu.GetMenu("AB").Get<CheckBox>("noTextures").CurrentValue == false)
+                else
                 {
                     if (File.Exists(loadTextureDir + "loadTexture"))
                     {
@@ -146,23 +142,18 @@ namespace AutoBuddy
             }
             catch (Exception e)
             {
-                Console.WriteLine("Load Texture Error: '{0}'", e);
+                Console.WriteLine($"Load Texture Error: '{e}'");
             }
         }
 
         //For Kalista
         private static void On_Update(EventArgs args)
         {
-
             if (BlackSpear.IsOwned())
             {
-                foreach (AIHeroClient ally in EntityManager.Heroes.Allies)
+                if (myHero.CountAllyChampionsInRange(BlackSpear.Range) == 1)
                 {
-                    if (ally != null)
-                    {
-                        Console.Write("Searching for target");
-                        BlackSpear.Cast(ally);
-                    }
+                    BlackSpear.Cast(EntityManager.Allies.Find(x => x.Distance(myHero) < BlackSpear.Range));
                 }
             }
         }
@@ -171,106 +162,321 @@ namespace AutoBuddy
         private static void Start()
         {
             RandGen.Start();
-            bool generic = false;
+            var generic = false;
             switch (ObjectManager.Player.Hero)
             {
-                case Champion.Ashe:
-                    myChamp = new Ashe();
-                    break;
-                case Champion.Caitlyn:
-                    myChamp = new Caitlyn();
-                    break;
-                default:
-                    generic = true;
-                    myChamp = new Generic();
-                    break;
-                case Champion.Ezreal:
-                    myChamp = new Ezreal();
-                    break;
-                case Champion.Cassiopeia:
-                    myChamp = new Cassiopeia();
-                    break;
-                case Champion.Ryze:
-                    myChamp = new Ryze();
-                    break;
-                case Champion.Soraka:
-                    myChamp = new Soraka();
-                    break;
-                case Champion.Kayle:
-                    myChamp = new Kayle();
-                    break;
-                case Champion.Tristana:
-                    myChamp = new Tristana();
-                    break;
-                case Champion.Sivir:
-                    myChamp = new Sivir();
-                    break;
+                case Champion.Aatrox:
+                    goto default;
                 case Champion.Ahri:
                     myChamp = new Ahri();
                     break;
+                case Champion.Akali:
+                    goto default;
+                case Champion.Alistar:
+                    goto default;
+                case Champion.Amumu:
+                    goto default;
                 case Champion.Anivia:
                     myChamp = new Anivia();
                     break;
                 case Champion.Annie:
                     myChamp = new Annie();
                     break;
-                case Champion.Corki:
-                    myChamp = new Corki();
+                case Champion.Ashe:
+                    myChamp = new Ashe();
                     break;
-                case Champion.Brand:
-                    myChamp = new Brand();
-                    break;
+                case Champion.AurelionSol:
+                    goto default;
                 case Champion.Azir:
                     myChamp = new Azir();
                     break;
-                case Champion.Xerath:
-                    myChamp = new Xerath();
+                case Champion.Bard:
+                    goto default;
+                case Champion.Blitzcrank:
+                    goto default;
+                case Champion.Brand:
+                    myChamp = new Brand();
                     break;
-                case Champion.Morgana:
-                    myChamp = new Morgana();
+                case Champion.Braum:
+                    goto default;
+                case Champion.Caitlyn:
+                    myChamp = new Caitlyn();
                     break;
+                case Champion.Camille:
+                    goto default;
+                case Champion.Cassiopeia:
+                    myChamp = new Cassiopeia();
+                    break;
+                case Champion.Chogath:
+                    goto default;
+                case Champion.Corki:
+                    myChamp = new Corki();
+                    break;
+                case Champion.Darius:
+                    goto default;
+                case Champion.Diana:
+                    goto default;
+                case Champion.DrMundo:
+                    goto default;
                 case Champion.Draven:
                     myChamp = new Draven();
                     break;
-                case Champion.Twitch:
-                    myChamp = new Twitch();
+                case Champion.Ekko:
+                    goto default;
+                case Champion.Elise:
+                    goto default;
+                case Champion.Evelynn:
+                    goto default;
+                case Champion.Ezreal:
+                    myChamp = new Ezreal();
+                    break;
+                case Champion.FiddleSticks:
+                    goto default;
+                case Champion.Fiora:
+                    goto default;
+                case Champion.Fizz:
+                    goto default;
+                case Champion.Galio:
+                    goto default;
+                case Champion.Gangplank:
+                    goto default;
+                case Champion.Garen:
+                    myChamp = new Garen();
+                    break;
+                case Champion.Gnar:
+                    goto default;
+                case Champion.Gragas:
+                    goto default;
+                case Champion.Graves:
+                    goto default;
+                case Champion.Hecarim:
+                    goto default;
+                case Champion.Heimerdinger:
+                    goto default;
+                case Champion.Illaoi:
+                    goto default;
+                case Champion.Irelia:
+                    goto default;
+                case Champion.Ivern:
+                    goto default;
+                case Champion.Janna:
+                    goto default;
+                case Champion.JarvanIV:
+                    goto default;
+                case Champion.Jax:
+                    goto default;
+                case Champion.Jayce:
+                    goto default;
+                case Champion.Jhin:
+                    goto default;
+                case Champion.Jinx:
+                    myChamp = new Jinx();
                     break;
                 case Champion.Kalista:
                     myChamp = new Kalista();
                     break;
-                case Champion.Velkoz:
-                    myChamp = new Velkoz();
-                    break;
-                case Champion.Leblanc:
-                    myChamp = new Leblanc();
-                    break;
-                case Champion.Jinx:
-                    myChamp = new Jinx();
-                    break;
+                case Champion.Karma:
+                    goto default;
+                case Champion.Karthus:
+                    goto default;
+                case Champion.Kassadin:
+                    goto default;
                 case Champion.Katarina:
                     myChamp = new Katarina();
                     break;
+                case Champion.Kayle:
+                    myChamp = new Kayle();
+                    break;
+                case Champion.Kennen:
+                    goto default;
+                case Champion.Khazix:
+                    goto default;
+                case Champion.Kindred:
+                    goto default;
+                case Champion.Kled:
+                    goto default;
+                case Champion.KogMaw:
+                    goto default;
+                case Champion.Leblanc:
+                    myChamp = new Leblanc();
+                    break;
+                case Champion.LeeSin:
+                    goto default;
+                case Champion.Leona:
+                    goto default;
+                case Champion.Lissandra:
+                    goto default;
+                case Champion.Lucian:
+                    goto default;
+                case Champion.Lulu:
+                    goto default;
+                case Champion.Lux:
+                    goto default;
+                case Champion.Malphite:
+                    goto default;
+                case Champion.Malzahar:
+                    goto default;
+                case Champion.Maokai:
+                    goto default;
+                case Champion.MasterYi:
+                    goto default;
+                case Champion.MissFortune:
+                    goto default;
+                case Champion.Mordekaiser:
+                    goto default;
+                case Champion.Morgana:
+                    myChamp = new Morgana();
+                    break;
+                case Champion.Nami:
+                    goto default;
+                case Champion.Nasus:
+                    goto default;
+                case Champion.Nautilus:
+                    goto default;
                 case Champion.Nidalee:
                     myChamp = new Nidalee();
                     break;
+                case Champion.Nocturne:
+                    goto default;
+                case Champion.Nunu:
+                    goto default;
+                case Champion.Olaf:
+                    goto default;
+                case Champion.Orianna:
+                    goto default;
+                case Champion.Pantheon:
+                    goto default;
+                case Champion.Poppy:
+                    goto default;
+                case Champion.Quinn:
+                    goto default;
+                case Champion.Rammus:
+                    goto default;
+                case Champion.RekSai:
+                    goto default;
+                case Champion.Renekton:
+                    goto default;
+                case Champion.Rengar:
+                    goto default;
+                case Champion.Riven:
+                    goto default;
+                case Champion.Rumble:
+                    goto default;
+                case Champion.Ryze:
+                    myChamp = new Ryze();
+                    break;
+                case Champion.Sejuani:
+                    goto default;
+                case Champion.Shaco:
+                    goto default;
+                case Champion.Shen:
+                    goto default;
+                case Champion.Shyvana:
+                    goto default;
+                case Champion.Singed:
+                    goto default;
+                case Champion.Sion:
+                    goto default;
+                case Champion.Sivir:
+                    myChamp = new Sivir();
+                    break;
+                case Champion.Skarner:
+                    goto default;
+                case Champion.Sona:
+                    goto default;
+                case Champion.Soraka:
+                    myChamp = new Soraka();
+                    break;
+                case Champion.Swain:
+                    goto default;
+                case Champion.Syndra:
+                    goto default;
+                case Champion.TahmKench:
+                    goto default;
+                case Champion.Taliyah:
+                    goto default;
+                case Champion.Talon:
+                    goto default;
+                case Champion.Taric:
+                    goto default;
+                case Champion.Teemo:
+                    goto default;
+                case Champion.Thresh:
+                    goto default;
+                case Champion.Tristana:
+                    myChamp = new Tristana();
+                    break;
+                case Champion.Trundle:
+                    goto default;
+                case Champion.Tryndamere:
+                    goto default;
+                case Champion.TwistedFate:
+                    goto default;
+                case Champion.Twitch:
+                    myChamp = new Twitch();
+                    break;
+                case Champion.Udyr:
+                    goto default;
+                case Champion.Urgot:
+                    goto default;
+                case Champion.Varus:
+                    goto default;
+                case Champion.Vayne:
+                    goto default;
+                case Champion.Veigar:
+                    goto default;
+                case Champion.Velkoz:
+                    myChamp = new Velkoz();
+                    break;
+                case Champion.Vi:
+                    goto default;
+                case Champion.Viktor:
+                    goto default;
+                case Champion.Vladimir:
+                    goto default;
+                case Champion.Volibear:
+                    goto default;
+                case Champion.Warwick:
+                    goto default;
+                case Champion.MonkeyKing:
+                    goto default;
+                case Champion.Xerath:
+                    myChamp = new Xerath();
+                    break;
+                case Champion.XinZhao:
+                    goto default;
+                case Champion.Yasuo:
+                    goto default;
+                case Champion.Yorick:
+                    goto default;
+                case Champion.Zac:
+                    goto default;
+                case Champion.Zed:
+                    goto default;
+                case Champion.Ziggs:
+                    goto default;
+                case Champion.Zilean:
+                    goto default;
+                case Champion.Zyra:
+                    goto default;
+                default:
+                    generic = true;
+                    myChamp = new Generic();
+                    break;
             }
-            CustomLvlSeq cl = new CustomLvlSeq(menu, AutoWalker.p, Path.Combine(SandboxConfig.DataDirectory
-            , "AutoBuddy\\Skills"));
+            var cl = new CustomLvlSeq(menu, AutoWalker.p, Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy\\Skills"));
             if (!generic)
             {
-                BuildCreator bc = new BuildCreator(menu, Path.Combine(SandboxConfig.DataDirectory
+                var bc = new BuildCreator(menu, Path.Combine(SandboxConfig.DataDirectory
                     , "AutoBuddy\\Builds"), myChamp.ShopSequence);
             }
-
-
             else
             {
-                myChamp = new Generic();
                 if (MainMenu.GetMenu("AB_" + ObjectManager.Player.ChampionName) != null &&
                     MainMenu.GetMenu("AB_" + ObjectManager.Player.ChampionName).Get<Label>("shopSequence") != null)
                 {
                     Chat.Print("Autobuddy: Loaded shop plugin for " + ObjectManager.Player.ChampionName);
-                    BuildCreator bc = new BuildCreator(menu, Path.Combine(SandboxConfig.DataDirectory
+                    var bc = new BuildCreator(menu, Path.Combine(SandboxConfig.DataDirectory
                         , "AutoBuddy\\Builds"),
                         MainMenu.GetMenu("AB_" + ObjectManager.Player.ChampionName)
                             .Get<Label>("shopSequence")
@@ -278,42 +484,33 @@ namespace AutoBuddy
                 }
                 else
                 {
-                    BuildCreator bc = new BuildCreator(menu, Path.Combine(SandboxConfig.DataDirectory
+                    var bc = new BuildCreator(menu, Path.Combine(SandboxConfig.DataDirectory
                         , "AutoBuddy\\Builds"), myChamp.ShopSequence);
                 }
             }
             Logic = new LogicSelector(myChamp, menu);
-            new Disrespekt();
-            Telemetry.SendEvent("GameStart", new Dictionary<string, string>()
-            {
-                {"GameChamp", AutoWalker.p.ChampionName},
-                {"GameType", BrutalExtensions.GetGameType()},
-                {"GameRegion", Game.Region},
-                {"GameID", ""+AutoWalker.GameID},
-            });
         }
 
         private static void createFS()
         {
             try
             {
-                if (!Directory.Exists(SandboxConfig.DataDirectory + "\\AutoBuddy"))
+                if (!Directory.Exists(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy")))
                 {
-                    System.IO.Directory.CreateDirectory(SandboxConfig.DataDirectory + "\\AutoBuddy");
-
+                    Directory.CreateDirectory(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy"));
                 }
-                if (!Directory.Exists(SandboxConfig.DataDirectory + "\\AutoBuddy\\Builds"))
+                if (!Directory.Exists(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy", "Builds")))
                 {
-                    System.IO.Directory.CreateDirectory(SandboxConfig.DataDirectory + "\\AutoBuddy\\Builds");
+                    Directory.CreateDirectory(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy", "Builds"));
                 }
-                if (!Directory.Exists(SandboxConfig.DataDirectory + "\\AutoBuddy\\Skills"))
+                if (!Directory.Exists(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy", "Skills")))
                 {
-                    System.IO.Directory.CreateDirectory(SandboxConfig.DataDirectory + "\\AutoBuddy\\Skills");
+                    Directory.CreateDirectory(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy", "Skills"));
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("CreateFS Error: '{0}'", e);
+                Console.WriteLine($"CreateFS Error: '{e}'");
             }
         }
     }

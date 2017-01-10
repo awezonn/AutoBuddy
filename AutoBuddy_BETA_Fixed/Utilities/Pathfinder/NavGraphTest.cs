@@ -20,18 +20,18 @@ namespace AutoBuddy.Utilities.Pathfinder
         {
             p=new List<Vector3>();
             navGraph = n;
-            Menu menu = MainMenu.AddMenu("AB NavGraph", "abnavgraph");
-            KeyBind addSelectNode = new KeyBind("Add/select node", false, KeyBind.BindTypes.HoldActive);
+            var menu = MainMenu.AddMenu("AB NavGraph", "abnavgraph");
+            var addSelectNode = new KeyBind("Add/select node", false, KeyBind.BindTypes.HoldActive);
             addSelectNode.OnValueChange += addSelectNode_OnValueChange;
-            KeyBind removeNode = new KeyBind("remove node", false, KeyBind.BindTypes.HoldActive);
+            var removeNode = new KeyBind("remove node", false, KeyBind.BindTypes.HoldActive);
             removeNode.OnValueChange += removeNode_OnValueChange;
-            KeyBind addremoveneighbor = new KeyBind("Add/remove neighbor", false, KeyBind.BindTypes.HoldActive);
+            var addremoveneighbor = new KeyBind("Add/remove neighbor", false, KeyBind.BindTypes.HoldActive);
             addremoveneighbor.OnValueChange += addremoveneighbor_OnValueChange;
 
             menu.Add("addselsect", addSelectNode);
             menu.Add("removeno", removeNode);
             menu.Add("addneigh", addremoveneighbor);
-            Slider zoom=new Slider("Zoom", 2250, 0, 5000);
+            var zoom=new Slider("Zoom", 2250, 0, 5000);
             menu.Add("zoom", zoom);
             zoom.CurrentValue = (int)Camera.ZoomDistance;
             zoom.OnValueChange += zoom_OnValueChange;
@@ -109,7 +109,7 @@ namespace AutoBuddy.Utilities.Pathfinder
                 Circle.Draw(new ColorBGRA(255, 0, 0, 255), 100, navGraph.Nodes[selectedNode].position);
             navGraph.Draw();
 
-            for (int i = 0; i < p.Count-1; i++)
+            for (var i = 0; i < p.Count-1; i++)
             {
                 if(p[i].IsOnScreen()||p[i+1].IsOnScreen())
                     Line.DrawLine(Color.Aqua, 4, p[i], p[i+1]);
@@ -129,7 +129,7 @@ namespace AutoBuddy.Utilities.Pathfinder
         void addremoveneighbor_OnValueChange(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
         {
             if (!args.NewValue || selectedNode < 0) return;
-            int closestNodeId = navGraph.FindClosestNode(Game.CursorPos, selectedNode);
+            var closestNodeId = navGraph.FindClosestNode(Game.CursorPos, selectedNode);
             if (navGraph.Nodes[closestNodeId].position.Distance(Game.CursorPos) > 300) return;
             if (navGraph.LinkExists(selectedNode, closestNodeId))
                 navGraph.RemoveLink(selectedNode, closestNodeId);
@@ -144,7 +144,7 @@ namespace AutoBuddy.Utilities.Pathfinder
         void addSelectNode_OnValueChange(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
         {
             if (!args.NewValue) return;
-            int closestNodeId = navGraph.FindClosestNode(Game.CursorPos);
+            var closestNodeId = navGraph.FindClosestNode(Game.CursorPos);
             if (closestNodeId==-1||navGraph.Nodes[closestNodeId].position.Distance(Game.CursorPos) > 300)
             {
                 navGraph.AddNode(Game.CursorPos);

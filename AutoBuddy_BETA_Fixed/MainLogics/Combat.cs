@@ -69,7 +69,7 @@ namespace AutoBuddy.MainLogics
 
             if ((victim != null || har != null) && !active)
             {
-                LogicSelector.MainLogics returnT = current.SetLogic(LogicSelector.MainLogics.CombatLogic);
+                var returnT = current.SetLogic(LogicSelector.MainLogics.CombatLogic);
                 if (returnT != LogicSelector.MainLogics.CombatLogic) returnTo = returnT;
             }
             if (!active)
@@ -82,9 +82,9 @@ namespace AutoBuddy.MainLogics
             if (victim != null)
             {
                 current.myChamp.Combo(victim);
-                Vector3 vicPos = Prediction.Position.PredictUnitPosition(victim, 500).To3D();
+                var vicPos = Prediction.Position.PredictUnitPosition(victim, 500).To3D();
 
-                Vector3 posToWalk =
+                var posToWalk =
                     AutoWalker.p.Position.Away(vicPos,
                         (victim.BoundingRadius + current.myChamp.OptimalMaxComboDistance - 30)*
                         Math.Min(current.localAwareness.HeroStrength(victim)/current.localAwareness.MyStrength()*1.6f, 1));
@@ -99,7 +99,7 @@ namespace AutoBuddy.MainLogics
                             .To3DWorld();
                 }
 
-                Obj_AI_Turret nearestEnemyTurret = posToWalk.GetNearestTurret();
+                var nearestEnemyTurret = posToWalk.GetNearestTurret();
 
                 if (victim.Health < 10 + 4 * AutoWalker.p.Level && EntityManager.Heroes.Allies.Any(al => !al.IsDead() && al.Distance(vicPos) < 550))
                     AutoWalker.UseIgnite(victim);
@@ -126,7 +126,7 @@ namespace AutoBuddy.MainLogics
                 AutoWalker.WalkTo(posToWalk);
 
 
-                if (AutoWalker.HasGhost == true && AutoWalker.Ghost.IsReady() &&
+                    if (AutoWalker.HasGhost && AutoWalker.Ghost.IsReady() &&
                     AutoWalker.p.HealthPercent() / victim.HealthPercent() > 2 &&
                     victim.Distance(AutoWalker.p) > AutoWalker.p.AttackRange + victim.BoundingRadius + 150 &&
                     victim.Distance(victim.Position.GetNearestTurret()) > 1500)
@@ -144,7 +144,7 @@ namespace AutoBuddy.MainLogics
 
                 if (Shop.CanShop == false)
                 {
-                    int hppotval = Program.hpvaluePot;
+                    var hppotval = Program.hpvaluePot;
                     if (ObjectManager.Player.HealthPercent() < hppotval)
                     {
                         AutoWalker.UseHPot();
@@ -153,11 +153,11 @@ namespace AutoBuddy.MainLogics
             }
             else
             {
-                Vector3 harPos = Prediction.Position.PredictUnitPosition(har, 500).To3D();
+                var harPos = Prediction.Position.PredictUnitPosition(har, 500).To3D();
                 harPos = AutoWalker.p.Position.Away(harPos, current.myChamp.HarassDistance + har.BoundingRadius - 20);
                 
                 lastMode = "harass";
-                Obj_AI_Turret tu = harPos.GetNearestTurret();
+                var tu = harPos.GetNearestTurret();
                 AutoWalker.SetMode(Orbwalker.ActiveModes.Harass);
                 if (harPos.Distance(tu) < 1000)
                 {

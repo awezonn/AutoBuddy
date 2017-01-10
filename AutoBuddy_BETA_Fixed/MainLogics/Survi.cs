@@ -51,7 +51,7 @@ namespace AutoBuddy.MainLogics
             spierdalanko = Game.Time + sec;
             if (active || (current.current == LogicSelector.MainLogics.CombatLogic && AutoWalker.p.HealthPercent() > 13))
                 return;
-            LogicSelector.MainLogics returnT = current.SetLogic(LogicSelector.MainLogics.SurviLogic);
+            var returnT = current.SetLogic(LogicSelector.MainLogics.SurviLogic);
             if (returnT != LogicSelector.MainLogics.SurviLogic) returnTo = returnT;
         }
 
@@ -59,7 +59,7 @@ namespace AutoBuddy.MainLogics
         {
             spierdalanko = Game.Time + sec;
             if (active) return;
-            LogicSelector.MainLogics returnT = current.SetLogic(LogicSelector.MainLogics.SurviLogic);
+            var returnT = current.SetLogic(LogicSelector.MainLogics.SurviLogic);
             if (returnT != LogicSelector.MainLogics.SurviLogic) returnTo = returnT;
         }
 
@@ -99,7 +99,7 @@ namespace AutoBuddy.MainLogics
             }                       
             if (Shop.CanShop == false)
             {
-                int hppotval = Program.hpvaluePot;
+                var hppotval = Program.hpvaluePot;
                 if (ObjectManager.Player.HealthPercent() < hppotval)
                 {
                     AutoWalker.UseHPot();
@@ -110,7 +110,7 @@ namespace AutoBuddy.MainLogics
                 current.saveMylife = false;
                 current.SetLogic(returnTo);
             }
-            Vector3 enemyTurret = AutoWalker.p.GetNearestTurret().Position;
+            var enemyTurret = AutoWalker.p.GetNearestTurret().Position;
             
             Vector3 closestSafePoint;
             if (AutoWalker.p.Distance(enemyTurret) > 1200)
@@ -118,7 +118,7 @@ namespace AutoBuddy.MainLogics
                 closestSafePoint = AutoWalker.p.GetNearestTurret(false).Position;
                 if (closestSafePoint.Distance(AutoWalker.p) > 2000)
                 {
-                    AIHeroClient ally = EntityManager.Heroes.Allies.Where(
+                    var ally = EntityManager.Heroes.Allies.Where(
                         a =>
                             a.Distance(AutoWalker.p) < 1500 &&
                             current.localAwareness.LocalDomination(a.Position) < -40000)
@@ -129,7 +129,7 @@ namespace AutoBuddy.MainLogics
                 }
                 if (closestSafePoint.Distance(AutoWalker.p) > 150)
                 {
-                    AIHeroClient ene =
+                    var ene =
                         EntityManager.Heroes.Enemies
                             .FirstOrDefault(en => en.Health > 0 && en.Distance(closestSafePoint) < 300);
                     if (ene != null)
@@ -151,7 +151,7 @@ namespace AutoBuddy.MainLogics
 
             if (AutoWalker.p.HealthPercent < 15 && AutoWalker.HasIgnite == true && AutoWalker.Ignite.IsReady())
             {
-                AIHeroClient i = EntityManager.Heroes.Enemies.FirstOrDefault(en => en.Health < 50 + 20 * AutoWalker.p.Level && en.Distance(AutoWalker.p) < 600);
+                var i = EntityManager.Heroes.Enemies.FirstOrDefault(en => en.Health < 50 + 20 * AutoWalker.p.Level && en.Distance(AutoWalker.p) < 600);
                 if (i != null) AutoWalker.UseIgnite(i);
             }
 

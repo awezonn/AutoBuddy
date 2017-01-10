@@ -41,16 +41,16 @@ namespace AutoBuddy.MainLogics
             if (MainMenu.GetMenu("AB").Get<CheckBox>("debuginfo").CurrentValue)
                 Drawing.OnEndScene += Drawing_OnDraw;
             myChamp.Logic = this;
-            AutoWalker.EndGame += end;
             Core.DelayAction(Watchdog, 3000);
+            Core.DelayAction(StuckCheck, 100000);
         }
 
         public MainLogics current { get; set; }
 
-        private void Drawing_OnDraw(System.EventArgs args)
+        private void Drawing_OnDraw(EventArgs args)
         {
             Drawing.DrawText(250, 85, Color.Gold, current.ToString());
-            Vector2 v = Game.CursorPos.WorldToScreen();
+            var v = Game.CursorPos.WorldToScreen();
             Drawing.DrawText(v.X, v.Y - 20, Color.Gold, localAwareness.LocalDomination(Game.CursorPos) + " ");
         }
 
@@ -59,7 +59,7 @@ namespace AutoBuddy.MainLogics
             if (saveMylife) return current;
             if (newlogic != MainLogics.PushLogic)
                 pushLogic.Deactivate();
-            MainLogics old = current;
+            var old = current;
             switch (current)
             {
                 case MainLogics.SurviLogic:
@@ -110,18 +110,28 @@ namespace AutoBuddy.MainLogics
             }
         }
 
-        private void end(object o, EventArgs e)
+        private Vector3 _lastPosition = default(Vector3);
+        private int inLastPosCount = 0;
+        private void StuckCheck()
         {
-            Telemetry.SendEvent("GameEnd", new Dictionary<string, string>()
+            Core.DelayAction(StuckCheck, 100);
+            var me = AutoWalker.p;
+            if (_lastPosition == me.Position && !me.IsDead && !me.IsRecalling() && !me.IsInFountainRange())
             {
-                {"GameChamp", AutoWalker.p.ChampionName},
-                {"GameKills",localAwareness.me.kills2+""},
-                {"GameDeaths",localAwareness.me.deaths+""},
-                {"GameAssists",localAwareness.me.assists+""},
-                {"GameFarm",localAwareness.me.farm+""},
-                {"GameID", AutoWalker.GameID},
-            });
+                inLastPosCount++;
+                if (inLastPosCount >= 15)
+                {
+                    Chat.Print("We're stuck");
+                    AutoWalker.WalkTo(AutoWalker.p.Position.Randomized());
+                }
+            }
+            else
+            {
+                inLastPosCount = 0;
+            }
+            _lastPosition = me.Position;
         }
+
         internal enum MainLogics
         {
             PushLogic,

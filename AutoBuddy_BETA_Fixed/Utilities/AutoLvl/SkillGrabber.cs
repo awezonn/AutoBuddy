@@ -38,10 +38,10 @@ namespace AutoBuddy.Utilities.AutoLvl
             if (locked != null)
                 locked[0] = true;
             Drawing.OnEndScene += Drawing_OnDraw;
-            BackgroundWorker bw = new BackgroundWorker {WorkerReportsProgress = true};
+            var bw = new BackgroundWorker {WorkerReportsProgress = true};
             bw.DoWork += delegate(object o, DoWorkEventArgs args)
             {
-                BackgroundWorker b = o as BackgroundWorker;
+                var b = o as BackgroundWorker;
                 generateChampList();
                 toFile(b);
 
@@ -72,18 +72,18 @@ namespace AutoBuddy.Utilities.AutoLvl
         private void toFile(BackgroundWorker bw=null)
         {
             
-            List<string> stringi = new List<string>();
-            foreach (string champLink in getChampLinks("http://www.mobafire.com/league-of-legends/champions"))
+            var stringi = new List<string>();
+            foreach (var champLink in getChampLinks("http://www.mobafire.com/league-of-legends/champions"))
             {
 
 
-                ChampSkilltoLvl iss = getSequence(getBestBuildLink(champLink));
+                var iss = getSequence(getBestBuildLink(champLink));
                 if(bw!=null)
                     bw.ReportProgress(0, "Updating skill sequences, current champ: " + iss.champ);
                 else
                     status = "Updating skill sequences, current champ: " + iss.champ;
-                string s = iss.champ + "=";
-                for (int i = 0; i < 18; i++)
+                var s = iss.champ + "=";
+                for (var i = 0; i < 18; i++)
                 {
                     s += iss.s[i].ToString();
                     if (i < 17)
@@ -100,12 +100,12 @@ namespace AutoBuddy.Utilities.AutoLvl
         private List<string> getChampLinks(string startingLink)
         {
 
-            string resp = startingLink.GetResponseText();
-            List<string> ret = new List<string>();
-            List<int> ind = BrutalExtensions.AllIndexesOf(resp, "\" class=\"champ-box");
-            foreach (int i in ind)
+            var resp = startingLink.GetResponseText();
+            var ret = new List<string>();
+            var ind = BrutalExtensions.AllIndexesOf(resp, "\" class=\"champ-box");
+            foreach (var i in ind)
             {
-                string s = resp.Substring(i - 60, 60);
+                var s = resp.Substring(i - 60, 60);
                 ret.Add(s.Substring(s.IndexOf("<a href=\"") + 9));
             }
             return ret;
@@ -113,11 +113,11 @@ namespace AutoBuddy.Utilities.AutoLvl
 
         private static string[] getBestBuildLink(string champLink)
         {
-            string resp = ("http://www.mobafire.com" + champLink).GetResponseText();
-            string st =
+            var resp = ("http://www.mobafire.com" + champLink).GetResponseText();
+            var st =
     resp.Substring(
         resp.IndexOf("<span class=\"badge \"></span>") + 64, 200);
-            string[] ret = new string[2];
+            var ret = new string[2];
             ret[0] = champLink.Substring(champLink.LastIndexOf("/")+1, champLink.LastIndexOf("-") - (champLink.LastIndexOf("/")+1));
             ret[1] = st.Substring(0, st.IndexOf("\" class=\"build-title"));
             
@@ -127,21 +127,21 @@ namespace AutoBuddy.Utilities.AutoLvl
         private ChampSkilltoLvl getSequence(string[] nameGuide)
         {
 
-            SkillToLvl[] seq = new SkillToLvl[18];
-            for (int i = 0; i < 18; i++)
+            var seq = new SkillToLvl[18];
+            for (var i = 0; i < 18; i++)
             {
                 seq[i] = SkillToLvl.NotSet;
             }
 
 
-            string resp = ("http://www.mobafire.com" + nameGuide[1]).GetResponseText();
-            string q =
+            var resp = ("http://www.mobafire.com" + nameGuide[1]).GetResponseText();
+            var q =
                 resp.Substring(
                     resp.IndexOf("<div class=\"float-right\" style=\"margin-left:7px;\"><img src=\"/images/key-q.png\"") - 2000, 2000);
             q = q.Substring(q.LastIndexOf("<div class=\"float-left\" style=\"margin-left:7px;\">") + 62);
 
 
-            MatchCollection matches = Regex.Matches(q, "[0-9]+");
+            var matches = Regex.Matches(q, "[0-9]+");
             foreach (Match match in matches)
             {
                 seq[int.Parse(match.ToString()) - 1] = SkillToLvl.Q;
@@ -192,7 +192,7 @@ namespace AutoBuddy.Utilities.AutoLvl
         private void generateChampList()
         {
             cn = new List<ChampName>();
-            foreach (ChampName c in from Champion champ in Enum.GetValues(typeof(Champion))
+            foreach (var c in from Champion champ in Enum.GetValues(typeof(Champion))
                                     select new ChampName
                                         {
                                             champ = champ,

@@ -16,12 +16,12 @@ namespace AutoBuddy.MyChampLogic
 
         public Sivir()
         {
-            skillSequence = new[] {2, 1, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3};
+            SkillSequence = new[] {2, 1, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3};
             ShopSequence =
                 "3340:Buy,2003:StartHpPot,1055:Buy,3086:Buy,2015:Buy,3087:Buy,1001:Buy,1038:Buy,3133:Buy,3508:Buy,3006:Buy,1038:Buy,2003:StopHpPot,1037:Buy,3031:Buy,1038:Buy,1055:Sell,1053:Buy,3072:Buy,3144:Buy,3153:Buy";
         }
 
-        public int[] skillSequence { get; private set; }
+        public int[] SkillSequence { get; private set; }
         public LogicSelector Logic { get; set; }
 
 

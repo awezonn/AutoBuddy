@@ -51,10 +51,10 @@ namespace AutoBuddy.Utilities.AutoLvl
         private void OnLvLUp(int level, bool overrid=false)
         {
             if(!enabled.CurrentValue&&!overrid)return;
-            for (int z = 0; z < level; z++)
+            for (var z = 0; z < level; z++)
             {
                 int qDesired = 0, wDesired = 0, eDesired = 0, rDesired = 0;
-                for (int i = 0; i < ObjectManager.Player.Level; i++)
+                for (var i = 0; i < ObjectManager.Player.Level; i++)
                 {
                     switch (skills[i])
                     {

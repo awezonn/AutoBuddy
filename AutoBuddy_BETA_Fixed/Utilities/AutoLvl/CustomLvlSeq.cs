@@ -40,8 +40,8 @@ namespace AutoBuddy.Utilities.AutoLvl
             locked = new bool[] { true };
             this.dir = dir;
             se = seq;
-            Menu menuSettings = m.AddSubMenu("Skill LvlUp", "AB_SL_SETTINGS");
-            CheckBox enabled = new CheckBox("Enabled", true);
+            var menuSettings = m.AddSubMenu("Skill LvlUp", "AB_SL_SETTINGS");
+            var enabled = new CheckBox("Enabled", true);
             menuSettings.AddGroupLabel("General");
             menuSettings.Add(champ + "enabled", enabled);
             menuSettings.AddSeparator(10);
@@ -86,7 +86,7 @@ namespace AutoBuddy.Utilities.AutoLvl
             this.champ = champ;
             def = new DefautSequences(dir + "\\" + "Skills-DEFAULT.txt");
             maxLvl = maxlvl;
-            Menu menu = m.AddSubMenu("Skill sequence: " + champ.ChampionName);
+            var menu = m.AddSubMenu("Skill sequence: " + champ.ChampionName);
 
 
 
@@ -94,7 +94,7 @@ namespace AutoBuddy.Utilities.AutoLvl
             
             sliders = new LvlSlider[maxlvl];
             skills = new SkillToLvl[maxlvl];
-            for (int i = 0; i < maxLvl; i++)
+            for (var i = 0; i < maxLvl; i++)
             {
                 sliders[i] = new LvlSlider(menu, i, this);
             }
@@ -211,7 +211,7 @@ namespace AutoBuddy.Utilities.AutoLvl
         private void clearSeq()
         {
             sa = false;
-            for (int i = 0; i < maxLvl; i++)
+            for (var i = 0; i < maxLvl; i++)
             {
                 skills[i] = SkillToLvl.NotSet;
                 sliders[i].Skill = SkillToLvl.NotSet;
@@ -224,14 +224,14 @@ namespace AutoBuddy.Utilities.AutoLvl
         private void initSeq(string seq)
         {
 
-            for (int i = 0; i < maxLvl; i++)
+            for (var i = 0; i < maxLvl; i++)
             {
                 skills[i] = SkillToLvl.NotSet;
             }
             sa = false;
             if (string.IsNullOrEmpty(seq) || seq.Split(';').Length != maxLvl)
             {
-                for (int i = 0; i < maxLvl; i++)
+                for (var i = 0; i < maxLvl; i++)
                 {
                     sliders[i].Skill = SkillToLvl.NotSet;
                 }
@@ -241,13 +241,13 @@ namespace AutoBuddy.Utilities.AutoLvl
                 try
                 {
 
-                    string[] s = seq.Split(';');
+                    var s = seq.Split(';');
 
-                    for (int i = 0; i < maxLvl; i++)
+                    for (var i = 0; i < maxLvl; i++)
                     {
                         sliders[i].Skill = (SkillToLvl)Enum.Parse(typeof(SkillToLvl), s[i], true);
                     }
-                    for (int i = 0; i < maxLvl; i++)
+                    for (var i = 0; i < maxLvl; i++)
                     {
                         skills[i] = (SkillToLvl)Enum.Parse(typeof(SkillToLvl), s[i], true);
                     }
@@ -255,7 +255,7 @@ namespace AutoBuddy.Utilities.AutoLvl
                 catch
                 {
                     Chat.Print("Skill upgrader: couldn't load skill sequence, set it manually.");
-                    for (int i = 0; i < maxLvl; i++)
+                    for (var i = 0; i < maxLvl; i++)
                     {
                         sliders[i].Skill = SkillToLvl.NotSet;
                     }
@@ -275,8 +275,8 @@ namespace AutoBuddy.Utilities.AutoLvl
         }
         private void save()
         {
-            string s = string.Empty;
-            for (int i = 0; i < maxLvl; i++)
+            var s = string.Empty;
+            for (var i = 0; i < maxLvl; i++)
             {
                 s += ";" + skills[i];
             }
@@ -285,8 +285,8 @@ namespace AutoBuddy.Utilities.AutoLvl
 
         private int CountSkillLvl(SkillToLvl s, int level)
         {
-            int lvl = 0;
-            for (int i = 0; i < level; i++)
+            var lvl = 0;
+            for (var i = 0; i < level; i++)
             {
                 if (skills[i] == s)
                     lvl++;
@@ -296,7 +296,7 @@ namespace AutoBuddy.Utilities.AutoLvl
 
         public bool canLvl(SkillToLvl s, int level)
         {
-            int q = CountSkillLvl(s, 18);
+            var q = CountSkillLvl(s, 18);
             if (s == SkillToLvl.R)
             {
                 if (q >= 3) return false;

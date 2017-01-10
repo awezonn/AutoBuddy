@@ -61,7 +61,7 @@ namespace AutoBuddy.MainLogics
 
         public void Reset(Obj_AI_Base myTower, Obj_AI_Base enemyTower, Lane ln)
         {
-            Vector3 pingPos = AutoWalker.p.Distance(AutoWalker.MyNexus) - 100 > myTower.Distance(AutoWalker.MyNexus)
+            var pingPos = AutoWalker.p.Distance(AutoWalker.MyNexus) - 100 > myTower.Distance(AutoWalker.MyNexus)
                 ? enemyTower.Position
                 : myTower.Position;
             Core.DelayAction(() => SafeFunctions.Ping(PingCategory.OnMyWay, pingPos.Randomized()), RandGen.r.Next(3000));
@@ -93,7 +93,7 @@ namespace AutoBuddy.MainLogics
         {
             if (Shop.CanShop == false)
             {
-                int hppotval = Program.hpvaluePot;
+                var hppotval = Program.hpvaluePot;
                 if (ObjectManager.Player.HealthPercent() < hppotval)
                 {
                     AutoWalker.UseHPot();
@@ -160,10 +160,13 @@ namespace AutoBuddy.MainLogics
         private void Between()
         {
             AutoWalker.SetMode(Orbwalker.ActiveModes.LaneClear);
-            Vector3 p = AvgPos(currentWave);
+            var p = AvgPos(currentWave);
+            var enemyNexus = ObjectManager.Get<Obj_HQ>().FirstOrDefault(x => x.Team != ObjectManager.Player.Team);
+            var extendValue = 600 - AutoWalker.p.AttackRange;
+            p = p.Extend(enemyNexus, extendValue).To3DWorld();
             if (p.Distance(AutoWalker.MyNexus) > myTurret.Distance(AutoWalker.MyNexus))
             {
-                AIHeroClient ally =
+                var ally =
                     EntityManager.Heroes.Allies.Where(
                         al => !al.IsMe &&
                               AutoWalker.p.Distance(al) < 1500 &&
@@ -206,8 +209,8 @@ namespace AutoBuddy.MainLogics
                 return;
             }
 
-            Vector3 p = new Vector3();
-            AIHeroClient ally =
+            var p = new Vector3();
+            var ally =
                 EntityManager.Heroes.Allies.Where(
                     al => !al.IsMe &&
                           AutoWalker.p.Distance(al) < 1200 && al.Distance(enemyTurret) < p.Distance(enemyTurret) + 150 &&
@@ -233,7 +236,7 @@ namespace AutoBuddy.MainLogics
         private Vector3 AvgPos(Obj_AI_Minion[] objects)
         {
             double x = 0, y = 0;
-            foreach (Obj_AI_Minion obj in objects)
+            foreach (var obj in objects)
             {
                 x += obj.Position.X;
                 y += obj.Position.Y;
@@ -248,7 +251,7 @@ namespace AutoBuddy.MainLogics
                 Core.DelayAction(SetOffset, 500);
                 return;
             }
-            float newEx = randomExtend;
+            var newEx = randomExtend;
             while (Math.Abs(newEx - randomExtend) < 190)
             {
                 newEx = RandGen.r.NextFloat(-400, 400);
@@ -261,7 +264,7 @@ namespace AutoBuddy.MainLogics
         private void SetWaveNumber()
         {
             Core.DelayAction(SetWaveNumber, 500);
-            Obj_AI_Minion closest =
+            var closest =
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(
                         min => min.IsAlly && min.Name.Length > 13 && min.GetLane() == lane && min.HealthPercent() > 80)
@@ -290,7 +293,7 @@ namespace AutoBuddy.MainLogics
                 return;
             }
 
-            Obj_AI_Minion[] newMinions =
+            var newMinions =
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(min => min.IsAlly && min.GetLane() == lane && min.GetWave() == CurrentWaveNum)
                     .ToArray();

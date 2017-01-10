@@ -81,13 +81,13 @@ namespace AutoBuddy
 
         public static Vector3 RotatedAround(this Vector3 rotated, Vector3 around, float angle)
         {
-            double s = Math.Sin(angle);
-            double c = Math.Cos(angle);
+            var s = Math.Sin(angle);
+            var c = Math.Cos(angle);
 
-            Vector2 ret = new Vector2(rotated.X - around.X, rotated.Y - around.Y);
+            var ret = new Vector2(rotated.X - around.X, rotated.Y - around.Y);
 
-            double xnew = ret.X*c - ret.Y*s;
-            double ynew = ret.X*s + ret.Y*c;
+            var xnew = ret.X*c - ret.Y*s;
+            var ynew = ret.X*s + ret.Y*c;
 
             ret.X = (float) xnew + around.X;
             ret.Y = (float) ynew + around.Y;
@@ -129,11 +129,16 @@ namespace AutoBuddy
             return unit.Health/unit.MaxHealth*100f;
         }
 
+        public static float ManaPercent(this Obj_AI_Base unit)
+        {
+            return unit.Mana/unit.MaxMana*100f;
+        }
+
         public static string Concatenate<T>(this IEnumerable<T> source, string delimiter)
         {
             var s = new StringBuilder();
-            bool first = true;
-            foreach (T t in source)
+            var first = true;
+            foreach (var t in source)
             {
                 if (first)
                 {
@@ -152,8 +157,8 @@ namespace AutoBuddy
         {
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("the string to find may not be empty", "value");
-            List<int> indexes = new List<int>();
-            for (int index = 0;; index += value.Length)
+            var indexes = new List<int>();
+            for (var index = 0;; index += value.Length)
             {
                 index = str.IndexOf(value, index);
                 if (index == -1)
@@ -164,7 +169,7 @@ namespace AutoBuddy
 
         public static string GetResponseText(this string address)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
+            var request = (HttpWebRequest)WebRequest.Create(address);
             request.Proxy = null;
             using (var response = (HttpWebResponse) request.GetResponse())
             {
@@ -178,17 +183,17 @@ namespace AutoBuddy
 
         public static string Post(this string address, Dictionary<string, string> data )
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(address);
+            var request = (HttpWebRequest)WebRequest.Create(address);
             request.Method = "POST";
             request.Proxy = null;
             request.ContentType = "application/x-www-form-urlencoded";
-            string postData = data.Aggregate("", (current, pair) => current + pair.Key+ "=" + pair.Value.ToBase64URL() + "&");
+            var postData = data.Aggregate("", (current, pair) => current + pair.Key+ "=" + pair.Value.ToBase64URL() + "&");
             postData = postData.Substring(0, postData.Length - 1);
             
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            var byteArray = Encoding.UTF8.GetBytes(postData);
             request.ContentLength = byteArray.Length;
 
-            Stream dataStream = request.GetRequestStream();
+            var dataStream = request.GetRequestStream();
             dataStream.Write(byteArray, 0, byteArray.Length);
             dataStream.Close();
 
@@ -205,29 +210,41 @@ namespace AutoBuddy
 
         public static string ToBase64URL(this string toEncode)
         {
-            byte[] toEncodeAsBytes
+            var toEncodeAsBytes
                   = Encoding.Default.GetBytes(toEncode);
-            string returnValue
+            var returnValue
                   = Convert.ToBase64String(toEncodeAsBytes);
             return HttpUtility.UrlEncode(returnValue);
         }
 
+        public static bool IsHealthlyConsumable(this IItem i)
+        {
+            return i.Id == 2003 || i.Id == 2009 || i.Id == 2010;
+        }
+
         public static bool IsHealthlyConsumable(this ItemId i)
         {
+            return (int)i == 2003 || (int)i == 2009 || (int)i == 2010;
+        }
 
-            return (int) i == 2003 || (int) i == 2009 || (int) i == 2010;
+        public static bool IsElixir(this IItem i)
+        {
+            return i.Id == 2138 || i.Id == 2139 || i.Id == 2140;
+        }
+
+        public static bool IsElixir(this ItemId i)
+        {
+            return (int)i == 2138 || (int)i == 2139 || (int)i == 2140;
         }
 
         public static bool IsHPotion(this ItemId i)
         {
-
             return (int) i == 2003 || (int) i == 2009 || (int) i == 2010 || (int) i == 2031;
         }
 
-
-        public static int GetItemSlot(this LoLItem it)
+        public static int GetItemSlot(this IItem it)
         {
-            BrutalItemInfo.GetItemSlot(it.id);
+            BrutalItemInfo.GetItemSlot(it.Id);
             return -1;
         }
 
@@ -239,10 +256,10 @@ namespace AutoBuddy
         public static Vector3 Away(this Vector3 myPos, Vector3 threatPos, float range, float add = 200,
             float resolution = 40)
         {
-            Vector3 r = threatPos.Extend(myPos, range).To3D();
-            Vector3 re = threatPos.Extend(myPos, range + add).To3D();
+            var r = threatPos.Extend(myPos, range).To3D();
+            var re = threatPos.Extend(myPos, range + add).To3D();
             if (!NavMesh.GetCollisionFlags(re).HasFlag(CollisionFlags.Wall)) return r;
-            for (int i = 1; i < resolution; i++)
+            for (var i = 1; i < resolution; i++)
             {
                 if (
                     !NavMesh.GetCollisionFlags(re.RotatedAround(threatPos, 3.14f/resolution*i))
@@ -261,8 +278,8 @@ namespace AutoBuddy
 
         public static Vector3[] Copy(this Vector3[] from)
         {
-            Vector3[] ar = new Vector3[from.Length];
-            for (int i = 0; i < ar.Length; i++)
+            var ar = new Vector3[from.Length];
+            for (var i = 0; i < ar.Length; i++)
             {
                 ar[i] = from[i].Copy();
             }

@@ -14,27 +14,27 @@ namespace AutoBuddy.Utilities.AutoShop
             _secondWord = _secondWord.Replace("\'", string.Empty).Replace(" ", string.Empty).ToLower();
             if (_firstWord == _secondWord)
                 return defaultMatchScore;
-            int halfLength = Math.Min(_firstWord.Length, _secondWord.Length)/2 + 1;
+            var halfLength = Math.Min(_firstWord.Length, _secondWord.Length)/2 + 1;
 
-            StringBuilder common1 = GetCommonCharacters(_firstWord, _secondWord, halfLength);
-            int commonMatches = common1.Length;
+            var common1 = GetCommonCharacters(_firstWord, _secondWord, halfLength);
+            var commonMatches = common1.Length;
 
             if (commonMatches == 0)
                 return defaultMismatchScore;
 
-            StringBuilder common2 = GetCommonCharacters(_secondWord, _firstWord, halfLength);
+            var common2 = GetCommonCharacters(_secondWord, _firstWord, halfLength);
 
             if (commonMatches != common2.Length)
                 return defaultMismatchScore;
-            int transpositions = 0;
-            for (int i = 0; i < commonMatches; i++)
+            var transpositions = 0;
+            for (var i = 0; i < commonMatches; i++)
             {
                 if (common1[i] != common2[i])
                     transpositions++;
             }
 
             transpositions /= 2;
-            double jaroMetric = commonMatches/(3.0*_firstWord.Length) + commonMatches/(3.0*_secondWord.Length) +
+            var jaroMetric = commonMatches/(3.0*_firstWord.Length) + commonMatches/(3.0*_secondWord.Length) +
                                 (commonMatches - transpositions)/(3.0*commonMatches);
             return jaroMetric;
         }
@@ -42,17 +42,17 @@ namespace AutoBuddy.Utilities.AutoShop
         private static StringBuilder GetCommonCharacters(string firstWord, string secondWord, int separationDistance)
         {
             if ((firstWord == null) || (secondWord == null)) return null;
-            StringBuilder returnCommons = new StringBuilder(20);
-            StringBuilder copy = new StringBuilder(secondWord);
-            int firstWordLength = firstWord.Length;
-            int secondWordLength = secondWord.Length;
+            var returnCommons = new StringBuilder(20);
+            var copy = new StringBuilder(secondWord);
+            var firstWordLength = firstWord.Length;
+            var secondWordLength = secondWord.Length;
 
-            for (int i = 0; i < firstWordLength; i++)
+            for (var i = 0; i < firstWordLength; i++)
             {
-                char character = firstWord[i];
-                bool found = false;
+                var character = firstWord[i];
+                var found = false;
 
-                for (int j = Math.Max(0, i - separationDistance);
+                for (var j = Math.Max(0, i - separationDistance);
                     !found && j < Math.Min(i + separationDistance, secondWordLength);
                     j++)
                 {

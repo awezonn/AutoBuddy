@@ -67,7 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Disrespekt.cs" />
     <Compile Include="MyChampLogic\Annie.cs" />
     <Compile Include="MyChampLogic\Anivia.cs" />
     <Compile Include="MyChampLogic\Corki.cs" />
@@ -78,6 +77,7 @@
     <Compile Include="MyChampLogic\Cassiopeia.cs" />
     <Compile Include="MyChampLogic\Ahri.cs" />
     <Compile Include="MyChampLogic\Draven.cs" />
+    <Compile Include="MyChampLogic\Garen.cs" />
     <Compile Include="MyChampLogic\Nidalee.cs" />
     <Compile Include="MyChampLogic\Katarina.cs" />
     <Compile Include="MyChampLogic\Jinx.cs" />
@@ -101,17 +101,18 @@
     </Compile>
     <Compile Include="Utilities\AutoLvl\SkillGrabber.cs" />
     <Compile Include="Utilities\AutoLvl\DefautSequences.cs" />
-    <Compile Include="Utilities\AutoShop\EasyShopV2.cs" />
+    <Compile Include="Utilities\AutoShop\AllItems.cs" />
     <Compile Include="Utilities\AutoShop\BrutalItemInfo.cs" />
-    <Compile Include="Utilities\AutoShop\LoLItem.cs" />
+    <Compile Include="Utilities\AutoShop\BuildCreator.cs" />
+    <Compile Include="Utilities\AutoShop\BuildElement.cs" />
+    <Compile Include="Utilities\AutoShop\EasyShopV2.cs" />
+    <Compile Include="Utilities\AutoShop\IItem.cs" />
     <Compile Include="Utilities\Pathfinder\NavGraph.cs" />
     <Compile Include="Utilities\Pathfinder\NavGraphTest.cs" />
     <Compile Include="Utilities\Pathfinder\Node.cs" />
     <Compile Include="Utilities\Pathfinder\PathNode.cs" />
     <Compile Include="Utilities\StringDistance.cs" />
     <Compile Include="Utilities\ChampLane.cs" />
-    <Compile Include="Utilities\AutoShop\BuildCreator.cs" />
-    <Compile Include="Utilities\AutoShop\BuildElement.cs" />
     <Compile Include="Utilities\AutoLvl\CustomLvlSeq.cs" />
     <Compile Include="Utilities\HeroInfo.cs" />
     <Compile Include="Utilities\LocalAwareness.cs" />
@@ -131,7 +132,6 @@
     <Compile Include="Utilities\AutoLvl\LvlSlider.cs" />
     <Compile Include="Utilities\AutoLvl\SkillLevelUp.cs" />
     <Compile Include="Utilities\Surrender.cs" />
-    <Compile Include="Utilities\Telemetry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -142,10 +142,8 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\item.txt" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

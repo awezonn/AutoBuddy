@@ -29,7 +29,7 @@ namespace AutoBuddy.Utilities.AutoLvl
         {
             try
             {
-                SkillGrabber b = new SkillGrabber(file);
+                var b = new SkillGrabber(file);
                 b.UpdateBuilds(locked);
             }
             catch (Exception e)
@@ -43,7 +43,7 @@ namespace AutoBuddy.Utilities.AutoLvl
 
         public string GetDefaultSequence(Champion champ)
         {
-            string ss = sequences.Split('\n').First(s => s.StartsWith(ObjectManager.Player.ChampionName));
+            var ss = sequences.Split('\n').First(s => s.StartsWith(ObjectManager.Player.ChampionName));
             return ss.Substring(ss.IndexOf('=')+1);
         }
     }

@@ -48,10 +48,10 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public void Save()
         {
-            using (FileStream f = new FileStream(navFile, FileMode.Create, FileAccess.Write))
+            using (var f = new FileStream(navFile, FileMode.Create, FileAccess.Write))
             {
                 f.Write(BitConverter.GetBytes(Nodes.Length), 0, 4);
-                foreach (Node node in Nodes)
+                foreach (var node in Nodes)
                 {
                     node.Serialize(f);
                 }
@@ -62,12 +62,12 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         private void load(string file)
         {
-            byte[] buffer = new byte[4];
-            using (FileStream f = new FileStream(file, FileMode.Open, FileAccess.Read))
+            var buffer = new byte[4];
+            using (var f = new FileStream(file, FileMode.Open, FileAccess.Read))
             {
                 f.Read(buffer, 0, 4);
                 Nodes=new Node[BitConverter.ToInt32(buffer, 0)];
-                for (int i = 0; i < Nodes.Length; i++)
+                for (var i = 0; i < Nodes.Length; i++)
                 {
                     Nodes[i]=new Node(f, buffer, this);
                     Nodes[i].passable = Nodes[i].position.Distance(gate1) > 200 &&
@@ -78,12 +78,12 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         private void load()
         {
-            byte[] buffer = new byte[4];
-            using (MemoryStream f = new MemoryStream(Resources.NavGraphSummonersRift))
+            var buffer = new byte[4];
+            using (var f = new MemoryStream(Resources.NavGraphSummonersRift))
             {
                 f.Read(buffer, 0, 4);
                 Nodes = new Node[BitConverter.ToInt32(buffer, 0)];
-                for (int i = 0; i < Nodes.Length; i++)
+                for (var i = 0; i < Nodes.Length; i++)
                 {
                     Nodes[i] = new Node(f, buffer, this);
                     Nodes[i].passable = Nodes[i].position.Distance(gate1) > 200 &&
@@ -104,7 +104,7 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public void AddNode(Vector3 pos)
         {
-            Node[] tmp = new Node[Nodes.Length + 1];
+            var tmp = new Node[Nodes.Length + 1];
             Nodes.CopyTo(tmp, 0);
             Nodes = tmp;
             Nodes[Nodes.Length - 1] = new Node(new int[0], pos, this);
@@ -117,13 +117,13 @@ namespace AutoBuddy.Utilities.Pathfinder
             {
                 RemoveLink(node, Nodes[node].Neighbors[0]);
             }
-            Node[] tmp = new Node[Nodes.Length - 1];
+            var tmp = new Node[Nodes.Length - 1];
             Array.Copy(Nodes, 0, tmp, 0, node);
             Array.Copy(Nodes, node + 1, tmp, node, Nodes.Length - node - 1);
             Nodes = tmp;
-            for (int i = 0; i < Nodes.Length; i++)
+            for (var i = 0; i < Nodes.Length; i++)
             {
-                for (int j = 0; j < Nodes[i].Neighbors.Length; j++)
+                for (var j = 0; j < Nodes[i].Neighbors.Length; j++)
                 {
                     if (Nodes[i].Neighbors[j] > node)
                         Nodes[i].Neighbors[j]--;
@@ -133,9 +133,9 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public int FindClosestNode(Vector3 pos)
         {
-            float minDist = float.MaxValue;
-            int node = -1;
-            for (int i = 0; i < Nodes.Length; i++)
+            var minDist = float.MaxValue;
+            var node = -1;
+            for (var i = 0; i < Nodes.Length; i++)
             {
                 if (!(pos.Distance(Nodes[i].position) < minDist)) continue;
                 minDist = pos.Distance(Nodes[i].position);
@@ -145,9 +145,9 @@ namespace AutoBuddy.Utilities.Pathfinder
         }
         public int FindClosestNode(Vector3 pos, Vector3 end)
         {
-            float minDist = float.MaxValue;
-            int node = -1;
-            for (int i = 0; i < Nodes.Length; i++)
+            var minDist = float.MaxValue;
+            var node = -1;
+            for (var i = 0; i < Nodes.Length; i++)
             {
                 if (!(pos.Distance(Nodes[i].position) < minDist) || end.Distance(Nodes[i].position) > end.Distance(ObjectManager.Player)) continue;
                 minDist = pos.Distance(Nodes[i].position);
@@ -158,9 +158,9 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public int FindClosestNode(Vector3 pos, int except)
         {
-            float minDist = float.MaxValue;
-            int node = -1;
-            for (int i = 0; i < Nodes.Length; i++)
+            var minDist = float.MaxValue;
+            var node = -1;
+            for (var i = 0; i < Nodes.Length; i++)
             {
                 if (except == i || !(pos.Distance(Nodes[i].position) < minDist || !Nodes[i].passable)) continue;
                 minDist = pos.Distance(Nodes[i].position);
@@ -172,9 +172,9 @@ namespace AutoBuddy.Utilities.Pathfinder
         public int FindClosestNode(int nodeId)
         {
 
-            float minDist = float.MaxValue;
-            int node = 0;
-            for (int i = 0; i < Nodes.Length; i++)
+            var minDist = float.MaxValue;
+            var node = 0;
+            for (var i = 0; i < Nodes.Length; i++)
             {
                 if (nodeId == i || Nodes[nodeId].position.Distance(Nodes[i].position) > minDist||!Nodes[i].passable) continue;
                 minDist = Nodes[nodeId].position.Distance(Nodes[i].position);
@@ -200,13 +200,13 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public void Draw()
         {
-            for (int i = 0; i < Nodes.Length; i++)
+            for (var i = 0; i < Nodes.Length; i++)
             {
                 Nodes[i].DrawPositions();
                 //if(Nodes[i].position.IsOnScreen())
                    // Drawing.DrawText(Nodes[i].position.WorldToScreen(), Color.Gold, "      " + i + "    " + Nodes[i].Neighbors.Length, 10);
             }
-            for (int i = 0; i < Nodes.Length; i++)
+            for (var i = 0; i < Nodes.Length; i++)
             {
                 Nodes[i].DrawLinks();
             }
@@ -215,8 +215,8 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public List<Vector3> FindPath(Vector3 start, Vector3 end)
         {
-            PathNode p = FindPath(FindClosestNode(start), FindClosestNode(end));
-            List<Vector3> ret = new List<Vector3> {end};
+            var p = FindPath(FindClosestNode(start), FindClosestNode(end));
+            var ret = new List<Vector3> {end};
             while (p!=null)
             {
                 ret.Add(Nodes[p.node].position);
@@ -227,8 +227,8 @@ namespace AutoBuddy.Utilities.Pathfinder
         }
         public List<Vector3> FindPath2(Vector3 start, Vector3 end)
         {
-            PathNode p = FindPath(FindClosestNode(start, end), FindClosestNode(end));
-            List<Vector3> ret = new List<Vector3> { end };
+            var p = FindPath(FindClosestNode(start, end), FindClosestNode(end));
+            var ret = new List<Vector3> { end };
             while (p != null)
             {
                 ret.Add(Nodes[p.node].position);
@@ -239,8 +239,8 @@ namespace AutoBuddy.Utilities.Pathfinder
         }
         public List<Vector3> FindPathRandom(Vector3 start, Vector3 end)
         {
-            PathNode p = FindPath(FindClosestNode(start, end), FindClosestNode(end));
-            List<Vector3> ret = new List<Vector3> { end };
+            var p = FindPath(FindClosestNode(start, end), FindClosestNode(end));
+            var ret = new List<Vector3> { end };
             while (p != null)
             {
                 ret.Add(Nodes[p.node].position.Randomized(-15f, 15f));
@@ -253,20 +253,20 @@ namespace AutoBuddy.Utilities.Pathfinder
         private PathNode FindPath(int startNode, int endNode)
         {
             if (startNode == -1 || endNode == -1) return null;
-            List<PathNode> open=new List<PathNode>();
-            List<PathNode> closed = new List<PathNode>();
+            var open=new List<PathNode>();
+            var closed = new List<PathNode>();
             open.Add(new PathNode(0, Nodes[startNode].GetDistance(endNode), startNode, null));
 
 
             while (open.Count > 0)
             {
-                PathNode q = open.OrderBy(n => n.fCost).First();
+                var q = open.OrderBy(n => n.fCost).First();
                 open.Remove(q);
-                foreach (int neighbor in Nodes[q.node].Neighbors)
+                foreach (var neighbor in Nodes[q.node].Neighbors)
                 {
                     if (!Nodes[neighbor].passable)
                         continue;
-                    PathNode s=new PathNode(q.gCost+
+                    var s=new PathNode(q.gCost+
                         Distance(q, neighbor) * (Nodes[neighbor].position.GetNearestTurret().Distance(Nodes[neighbor].position)<900?20:1)
                         
                         
@@ -275,12 +275,12 @@ namespace AutoBuddy.Utilities.Pathfinder
                     {
                         return s;
                     }
-                    PathNode sameNodeOpen = open.FirstOrDefault(el => el.node == neighbor);
+                    var sameNodeOpen = open.FirstOrDefault(el => el.node == neighbor);
                     if (sameNodeOpen != null)
                     {
                         if(sameNodeOpen.fCost<s.fCost) continue;
                     }
-                    PathNode sameNodeClosed = closed.FirstOrDefault(el => el.node == neighbor);
+                    var sameNodeClosed = closed.FirstOrDefault(el => el.node == neighbor);
                     if (sameNodeClosed != null)
                     {
                         if(sameNodeClosed.fCost<s.fCost) continue;

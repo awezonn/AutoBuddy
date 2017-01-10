@@ -5,7 +5,7 @@ namespace AutoBuddy.MyChampLogic
 {
     internal interface IChampLogic
     {
-        int[] skillSequence { get; }
+        int[] SkillSequence { get; }
         float MaxDistanceForAA { get; }
         float OptimalMaxComboDistance { get; }
         float HarassDistance { get; }

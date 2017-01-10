@@ -36,3 +36,16 @@ C:\Users\Jonathan\Documents\GitHub\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\Sh
 C:\Users\Jonathan\Documents\GitHub\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy_BETA_Fixed.csprojResolveAssemblyReference.cache
 C:\Users\Jonathan\Documents\GitHub\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy.Properties.Resources.resources
 C:\Users\Jonathan\Documents\GitHub\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy_BETA_Fixed.csproj.GenerateResource.Cache
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\AutoBuddy.exe.config
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\AutoBuddy.exe
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\AutoBuddy.pdb
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\EloBuddy.dll
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\EloBuddy.SDK.dll
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\Newtonsoft.Json.dll
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\SharpDX.Direct3D9.dll
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\bin\Release\SharpDX.dll
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy_BETA_Fixed.csprojResolveAssemblyReference.cache
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy.Properties.Resources.resources
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy_BETA_Fixed.csproj.GenerateResource.Cache
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy.exe
+C:\Users\Furkan\Desktop\AutoBuddy\AutoBuddy_BETA_Fixed\obj\Debug\AutoBuddy.pdb
