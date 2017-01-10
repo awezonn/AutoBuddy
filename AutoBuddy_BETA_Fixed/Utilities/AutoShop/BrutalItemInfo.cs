@@ -127,41 +127,19 @@ namespace AutoBuddy.Utilities.AutoShop
             var n = 0;
             var myItems = MyItems();
             var virtInv = new List<IItem>();
-            Action log = () =>
-            {
-                Console.WriteLine("n: " + n);
-                Console.WriteLine("myItems: ");
-                foreach (var item in myItems)
-                {
-                    Console.Write(item.Name + ", ");
-                }
-                Console.Write("\nvirtInv:");
-                foreach (var virt in virtInv)
-                {
-                    Console.Write(virt.Name + ", ");
-                }
-                Console.WriteLine();
-            };
             foreach (var el in elements.OrderBy(el => el.position))
             {
-                log();
                 if (el.action == ShopActionType.Buy)
                 {
-                    log();
                     BuyItemSim(virtInv, el.item);
-                    log();
                     virtInv.Add(el.item);
-                    log();
                     if (virtInv.Equal(myItems))
                     {
-                        log();
                         return n;
                     }
                 }
-                log();
                 n++;
             }
-            log();
             return -1;
         }
 
