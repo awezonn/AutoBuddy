@@ -121,7 +121,6 @@ namespace AutoBuddy.MainLogics
                 inLastPosCount++;
                 if (inLastPosCount >= 15)
                 {
-                    Chat.Print("We're stuck");
                     AutoWalker.WalkTo(AutoWalker.p.Position.Randomized());
                 }
             }

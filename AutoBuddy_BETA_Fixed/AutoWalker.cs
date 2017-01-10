@@ -46,8 +46,8 @@ namespace AutoBuddy
         static AutoWalker()
         {
             newPF = MainMenu.GetMenu("AB").Get<CheckBox>("newPF").CurrentValue;
-            NavGraph=new NavGraph(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy"));
-            PfNodes=new List<Vector3>();
+            NavGraph = new NavGraph(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy"));
+            PfNodes = new List<Vector3>();
             color = new ColorBGRA(79, 219, 50, 255);
             MyNexus = ObjectManager.Get<Obj_HQ>().First(n => n.IsAlly);
             EneMyNexus = ObjectManager.Get<Obj_HQ>().First(n => n.IsEnemy);
