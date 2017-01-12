@@ -67,7 +67,7 @@ namespace AutoBuddy.MyChampLogic
             {
                 W.Cast(AutoWalker.p);
             }
-            if (Q.CanCast(AutoWalker.p))
+            if ((AutoWalker.p.HasBuffOfType(BuffType.Slow) || AutoWalker.p.CountEnemyHeroesInRangeWithPrediction(500) > 2) && Q.CanCast(AutoWalker.p))
             {
                 Q.Cast(AutoWalker.p);
             }

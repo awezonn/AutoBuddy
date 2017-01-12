@@ -42,7 +42,6 @@ namespace AutoBuddy
 
         public static bool ABDebug = false;
         public static bool newPF;
-        public static EventHandler EndGame;
         static AutoWalker()
         {
             newPF = MainMenu.GetMenu("AB").Get<CheckBox>("newPF").CurrentValue;
@@ -74,32 +73,25 @@ namespace AutoBuddy
             }
             if (MainMenu.GetMenu("AB").Get<CheckBox>("debuginfo").CurrentValue)
                 Drawing.OnDraw += Drawing_OnDraw;
-            
-            Core.DelayAction(OnEndGame, 20000);
+
             updateItems();
             oldOrbwalk();
             Game.OnTick += OnTick;
+            Game.OnEnd += Game_OnEnd;
             Drawing.OnDraw += Drawing_OnDraw;
+        }
+
+        private static void Game_OnEnd(GameEndEventArgs args)
+        {
+            if (MainMenu.GetMenu("AB").Get<CheckBox>("autoclose").CurrentValue)
+            {
+                Core.DelayAction(() => Game.QuitGame(), 5000);
+            }
         }
 
         public static bool Recalling()
         {
             return p.IsRecalling();
-        }
-
-        private static void OnEndGame()
-        {
-            if (MyNexus != null && EneMyNexus != null && (MyNexus.Health > 1) && (EneMyNexus.Health > 1))
-            {
-                Core.DelayAction(OnEndGame, 5000);
-                return;
-            }
-
-            if (EndGame != null)
-                EndGame(null, new EventArgs());
-
-            if (MainMenu.GetMenu("AB").Get<CheckBox>("autoclose").CurrentValue)
-                Core.DelayAction(() => Game.QuitGame(), 5000);
         }
 
         public static Vector3 Target { get; private set; }
@@ -352,9 +344,10 @@ namespace AutoBuddy
                 TimeStuck = 0;
             }
             
-            if (TimeStuck/30 >= 100)
+            if (TimeStuck / 30 >= 100)
             {
                 Chat.Print("Closing game because you're stuck :/");
+                Chat.Print("Nobody will see these messages tho");
                 Game.QuitGame();
             }
 

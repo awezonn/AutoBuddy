@@ -36,7 +36,7 @@ namespace AutoBuddy.MyChampLogic
         {
             foreach (var enemy in EntityManager.Heroes.Enemies)
             {
-                if (!enemy.IsVisible || enemy.IsDead) continue;
+                if (!enemy.IsVisible || enemy.IsDead || enemy.Distance(AutoWalker.p) > 2500) continue;
 
                 if (AutoWalker.p.CalculateDamageOnUnit(enemy, DamageType.Magical, UltDamage) > enemy.Health)
                     R.CastMinimumHitchance(enemy, HitChance.High);

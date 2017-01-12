@@ -116,7 +116,7 @@ namespace AutoBuddy.MainLogics
         {
             Core.DelayAction(StuckCheck, 100);
             var me = AutoWalker.p;
-            if (_lastPosition == me.Position && !me.IsDead && !me.IsRecalling() && !me.IsInFountainRange())
+            if (_lastPosition == me.Position && !me.IsDead && !me.IsRecalling())
             {
                 inLastPosCount++;
                 if (inLastPosCount >= 15)

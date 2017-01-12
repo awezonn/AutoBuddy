@@ -35,7 +35,7 @@ namespace AutoBuddy.MainLogics
 
         public Push(LogicSelector current)
         {
-            color=new ColorBGRA(255, 210, 105, 255);
+            color = new ColorBGRA(255, 210, 105, 255);
             colorRed = new ColorBGRA(139, 0, 0, 255);
             colorGreen = new ColorBGRA(0, 100, 0, 255);
             SetRandVector();
@@ -91,7 +91,7 @@ namespace AutoBuddy.MainLogics
 
         private void Game_OnTick(EventArgs args)
         {
-            if (Shop.CanShop == false)
+            if (!Shop.CanShop)
             {
                 var hppotval = Program.hpvaluePot;
                 if (ObjectManager.Player.HealthPercent() < hppotval)
@@ -99,7 +99,7 @@ namespace AutoBuddy.MainLogics
                     AutoWalker.UseHPot();
                 }
             }
-            if (!active||myTurret==null) return;
+            if (!active || myTurret == null) return;
             if (!AutoWalker.p.IsDead() && (myTurret.Health <= 0 || enemyTurret.Health <= 0))
             {
                 currentLogic.loadLogic.SetLane();
@@ -117,7 +117,7 @@ namespace AutoBuddy.MainLogics
         {
             Drawing.DrawText(250, 40, Color.Gold,
                 "Push, active: " + active + "  wave num: " + CurrentWaveNum + " minions left: " + currentWave.Length);
-            Circle.Draw(color, 100, currentWave.Length <= 0 ? AutoWalker.p.Position : AvgPos(currentWave));
+            Circle.Draw(color, 100, currentWave.Length <= 0 ? AutoWalker.p.Position : AvgPosWithAttackRange(currentWave));
 
             if (myTurret != null)
                 Circle.Draw(colorGreen, 200, myTurret.Position);
@@ -160,10 +160,7 @@ namespace AutoBuddy.MainLogics
         private void Between()
         {
             AutoWalker.SetMode(Orbwalker.ActiveModes.LaneClear);
-            var p = AvgPos(currentWave);
-            var enemyNexus = ObjectManager.Get<Obj_HQ>().FirstOrDefault(x => x.Team != ObjectManager.Player.Team);
-            var extendValue = 600 - AutoWalker.p.AttackRange;
-            p = p.Extend(enemyNexus, extendValue).To3DWorld();
+            var p = AvgPosWithAttackRange(currentWave);
             if (p.Distance(AutoWalker.MyNexus) > myTurret.Distance(AutoWalker.MyNexus))
             {
                 var ally =
@@ -233,7 +230,7 @@ namespace AutoBuddy.MainLogics
             }
         }
 
-        private Vector3 AvgPos(Obj_AI_Minion[] objects)
+        private Vector3 AvgPosWithAttackRange(Obj_AI_Minion[] objects)
         {
             double x = 0, y = 0;
             foreach (var obj in objects)
@@ -241,7 +238,13 @@ namespace AutoBuddy.MainLogics
                 x += obj.Position.X;
                 y += obj.Position.Y;
             }
-            return new Vector2((float) (x/objects.Count()), (float) (y/objects.Count())).To3DWorld();
+            var p = new Vector2((float)(x / objects.Length), (float)(y / objects.Length)).To3DWorld();
+            var enemyNexus = ObjectManager.Get<Obj_HQ>().FirstOrDefault(sth => sth.Team != ObjectManager.Player.Team);
+            var allyNexus = ObjectManager.Get<Obj_HQ>().FirstOrDefault(sth => sth.Team == ObjectManager.Player.Team);
+            var extendValue = 600 - AutoWalker.p.AttackRange;
+            var awayFromMyNexus = AutoWalker.p.Distance(allyNexus) < AutoWalker.p.Distance(enemyNexus);
+            var ret = awayFromMyNexus ? p.Extend(allyNexus, -extendValue) : p.Extend(enemyNexus, extendValue);
+            return ret.To3DWorld();
         }
 
         private void SetOffset()
