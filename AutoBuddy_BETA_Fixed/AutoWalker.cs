@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AutoBuddy.Humanizers;
@@ -10,7 +9,6 @@ using AutoBuddy.Utilities.Pathfinder;
 using EloBuddy;
 using EloBuddy.Sandbox;
 using EloBuddy.SDK;
-using EloBuddy.SDK.Enumerations;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 using EloBuddy.SDK.Rendering;
@@ -44,6 +42,7 @@ namespace AutoBuddy
         public static bool newPF;
         static AutoWalker()
         {
+            Chat.Print("Game Mode: " + Game.Type);
             newPF = MainMenu.GetMenu("AB").Get<CheckBox>("newPF").CurrentValue;
             NavGraph = new NavGraph(Path.Combine(SandboxConfig.DataDirectory, "AutoBuddy"));
             PfNodes = new List<Vector3>();

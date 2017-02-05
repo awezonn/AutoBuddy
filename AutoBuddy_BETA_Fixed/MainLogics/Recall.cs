@@ -5,7 +5,6 @@ using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using SharpDX;
 using Color = System.Drawing.Color;
 
 namespace AutoBuddy.MainLogics
@@ -24,14 +23,11 @@ namespace AutoBuddy.MainLogics
         public Recall(LogicSelector currentLogic, Menu parMenu)
         {
             var menu = parMenu.AddSubMenu("Recall settings", "ergtrh");
-            flatGold=new Slider("Minimum base gold to recall", 560, 0, 4000);
-            goldPerLevel = new Slider("Minmum gold per level to recall", 70, 0, 300);
-            menu.AddSeparator(100);
             menu.AddLabel(
     @"
-Autobuddy will recall only if your HP/MP is lower than the percentage specified.
-(25% for HP/15% for MP)
-So you won't lose easy kills just because you have enough gold to buy sth.
+Autobuddy will recall only if your HP/MP is lower than the percentage you specified.
+(defaulted to 25% HP/15% MP)
+So you won't lose easy kills just because you have enough gold to buy something.
             ");
             current = currentLogic;
             foreach (
@@ -59,7 +55,7 @@ So you won't lose easy kills just because you have enough gold to buy sth.
                 return;
             }
 
-            if (AutoWalker.p.HealthPercent() < 25 || AutoWalker.p.ManaPercent() < 15)
+            if (AutoWalker.p.HealthPercent() < Program.recallHp || AutoWalker.p.ManaPercent() < Program.recallMana)
             {
                 current.SetLogic(LogicSelector.MainLogics.RecallLogic);
             }
@@ -140,7 +136,7 @@ So you won't lose easy kills just because you have enough gold to buy sth.
 
             if (!AutoWalker.Recalling())
             {
-                if (AutoWalker.Recall.IsReady())
+                if (AutoWalker.Recall.CanCast(AutoWalker.p))
                 {
                     AutoWalker.Recall.Cast();
                 }

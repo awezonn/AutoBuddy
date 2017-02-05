@@ -740,14 +740,14 @@ namespace AutoBuddy.Utilities.AutoShop
 
     class _2303 : IItem
     {
-        public override int BaseGold => 550;
+        public override int BaseGold => 650;
         public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _2049(), new _3097() };
         public override int Id => 2303;
         public override IEnumerable<int> Maps => new[] { 11 };
         public override string Name => "Eye of the Equinox";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 880;
+        public override int SellGold => 920;
     }
 
     class _3001 : IItem
@@ -1580,14 +1580,14 @@ namespace AutoBuddy.Utilities.AutoShop
 
     class _3109 : IItem
     {
-        public override int BaseGold => 800;
+        public override int BaseGold => 700;
         public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _3801(), new _1029(), new _3801() };
         public override int Id => 3109;
         public override IEnumerable<int> Maps => new[] { 8, 10, 11, 12 };
         public override string Name => "Knight's Vow";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1680;
+        public override int SellGold => 1610;
     }
 
     class _3110 : IItem

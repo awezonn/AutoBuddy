@@ -1,10 +1,6 @@
-﻿using System;
-using System.Reflection;
-using AutoBuddy.Utilities.AutoLvl;
-using EloBuddy;
+﻿using AutoBuddy.Utilities.AutoLvl;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using SharpDX;
 
 namespace AutoBuddy.Utilities
 {

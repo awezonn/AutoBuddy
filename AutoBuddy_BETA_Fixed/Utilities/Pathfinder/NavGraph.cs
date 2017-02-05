@@ -23,7 +23,7 @@ namespace AutoBuddy.Utilities.Pathfinder
         {
             if (ObjectManager.Player.Team == GameObjectTeam.Chaos)
             {
-                gate1=new Vector3(2685, 4784, 75);
+                gate1 = new Vector3(2685, 4784, 75);
                 gate2 = new Vector3(4813, 2806, 79);
             }
             else
@@ -31,7 +31,7 @@ namespace AutoBuddy.Utilities.Pathfinder
                 gate1 = new Vector3(10018, 12144, 75);
                 gate2 = new Vector3(12078, 10104, 79);
             }
-            navFile = Path.Combine(dir + "\\" + "NavGraph" + Game.MapId + ".txt");
+            navFile = Path.Combine(dir, "NavGraph" + Game.MapId + ".txt");
             NodeColor = new ColorBGRA(50, 200, 0, 255);
             LineColor = Color.Gold;
             Load();
@@ -97,9 +97,7 @@ namespace AutoBuddy.Utilities.Pathfinder
             if (!File.Exists(navFile))
                 load();
             else
-            {
                 load(navFile);
-            }
         }
 
         public void AddNode(Vector3 pos)
@@ -112,7 +110,6 @@ namespace AutoBuddy.Utilities.Pathfinder
         }
         public void RemoveNode(int node)
         {
-
             while (Nodes[node].Neighbors.Length > 0)
             {
                 RemoveLink(node, Nodes[node].Neighbors[0]);

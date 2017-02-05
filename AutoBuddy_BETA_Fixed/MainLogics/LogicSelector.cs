@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using AutoBuddy.MyChampLogic;
 using AutoBuddy.Utilities;
 using EloBuddy;

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using AutoBuddy.Utilities.AutoShop;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using SharpDX;
 
 namespace AutoBuddy.MainLogics
 {
@@ -108,12 +106,9 @@ namespace AutoBuddy.MainLogics
                 lastMode = "combo";
                 if (AutoWalker.p.Distance(nearestEnemyTurret) < 950 + AutoWalker.p.BoundingRadius)
                 {
-
                     if (victim.Health > AutoWalker.p.GetAutoAttackDamage(victim) + 15 ||
                         victim.Distance(AutoWalker.p) > AutoWalker.p.AttackRange + victim.BoundingRadius - 20)
                     {
-
-
                         lastMode = "enemy under turret, ignoring";
                         current.SetLogic(returnTo);
                         return;

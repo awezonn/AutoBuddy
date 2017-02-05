@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoBuddy.Humanizers;
 using AutoBuddy.MainLogics;
-using AutoBuddy.Utilities.AutoShop;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;

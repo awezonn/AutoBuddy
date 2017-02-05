@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text;
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Menu;
@@ -34,7 +32,7 @@ namespace AutoBuddy.Utilities.AutoShop
             property = typeof(CheckBox).GetProperty("Position");
 
 
-            string specialPath = null;
+            string specialPath;
 
             specialPath = SandboxConfig.DataDirectory + "AutoBuddy\\Builds\\";
 
