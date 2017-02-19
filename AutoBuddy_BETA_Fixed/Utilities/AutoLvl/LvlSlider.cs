@@ -24,7 +24,7 @@ namespace AutoBuddy.Utilities
             s = new Slider(" ", 0, 0, 5);
             this.cus = cus;
             level += 1;
-            skills =new string[]
+            skills = new[]
             {
                 "Level "+level+": Not set", "Level "+level+": Q", "Level "+level+": W", "Level "+level+": E", "Level "+level+": R", "Level "+level+": Not set"
             };

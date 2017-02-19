@@ -76,15 +76,24 @@ namespace AutoBuddy
             updateItems();
             oldOrbwalk();
             Game.OnTick += OnTick;
-            Game.OnEnd += Game_OnEnd;
+            Game.OnTick += GameEndHandler;
             Drawing.OnDraw += Drawing_OnDraw;
         }
 
-        private static void Game_OnEnd(GameEndEventArgs args)
+        private static void GameEndHandler(EventArgs args)
         {
-            if (MainMenu.GetMenu("AB").Get<CheckBox>("autoclose").CurrentValue)
+            // Code is taken from AramBuddy by @Definitely Not Kappa
+            var nexus = ObjectManager.Get<Obj_HQ>().FirstOrDefault(n => n.Health <= 0 || n.IsDead);
+            if (nexus != null)
             {
-                Core.DelayAction(() => Game.QuitGame(), 5000);
+                Core.DelayAction(() =>
+                {
+                    if (MainMenu.GetMenu("AB").Get<CheckBox>("autoclose").CurrentValue)
+                    {
+                        Game.QuitGame();
+                    }
+                }, 7500);
+                Game.OnTick -= GameEndHandler;
             }
         }
 

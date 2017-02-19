@@ -351,7 +351,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Warrior";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1401 : IItem
@@ -363,7 +363,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Cinderhulk";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1402 : IItem
@@ -375,7 +375,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Runic Echoes";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1408 : IItem
@@ -387,7 +387,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Warrior";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1409 : IItem
@@ -399,7 +399,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Cinderhulk";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1410 : IItem
@@ -411,7 +411,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Runic Echoes";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1412 : IItem
@@ -423,7 +423,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Warrior";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1413 : IItem
@@ -435,7 +435,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Cinderhulk";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1414 : IItem
@@ -447,7 +447,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Runic Echoes";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1416 : IItem
@@ -459,7 +459,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Bloodrazor";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1418 : IItem
@@ -471,7 +471,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Bloodrazor";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _1419 : IItem
@@ -483,7 +483,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override string Name => "Enchantment: Bloodrazor";
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1837;
+        public override int SellGold => 1838;
     }
 
     class _2003 : IItem
@@ -1017,13 +1017,13 @@ namespace AutoBuddy.Utilities.AutoShop
     class _3040 : IItem
     {
         public override int BaseGold => 0;
-        public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _3003() };
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
         public override int Id => 3040;
         public override IEnumerable<int> Maps => new[] { 8, 10, 11, 12 };
         public override string Name => "Seraph's Embrace";
         public override bool Purchaseable => false;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 2170;
+        public override int SellGold => 0;
     }
 
     class _3041 : IItem
@@ -1041,25 +1041,25 @@ namespace AutoBuddy.Utilities.AutoShop
     class _3042 : IItem
     {
         public override int BaseGold => 0;
-        public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _3004() };
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
         public override int Id => 3042;
         public override IEnumerable<int> Maps => new[] { 8, 10, 11, 12 };
         public override string Name => "Muramana";
         public override bool Purchaseable => false;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1680;
+        public override int SellGold => 0;
     }
 
     class _3043 : IItem
     {
         public override int BaseGold => 0;
-        public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _3008() };
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
         public override int Id => 3043;
         public override IEnumerable<int> Maps => new[] { 8, 10, 11, 12 };
         public override string Name => "Muramana";
         public override bool Purchaseable => false;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 1680;
+        public override int SellGold => 0;
     }
 
     class _3044 : IItem
@@ -1101,13 +1101,13 @@ namespace AutoBuddy.Utilities.AutoShop
     class _3048 : IItem
     {
         public override int BaseGold => 0;
-        public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _3007() };
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
         public override int Id => 3048;
         public override IEnumerable<int> Maps => new[] { 8, 10, 11, 12 };
         public override string Name => "Seraph's Embrace";
         public override bool Purchaseable => false;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
-        public override int SellGold => 2170;
+        public override int SellGold => 0;
     }
 
     class _3050 : IItem
@@ -1722,7 +1722,7 @@ namespace AutoBuddy.Utilities.AutoShop
         public override int SellGold => 2520;
     }
 
-    class _3133 : IItem
+    class _3133 : IItem 
     {
         public override int BaseGold => 400;
         public override IEnumerable<IItem> BuiltFrom => new IItem[] { new _1036(), new _1036() };
@@ -1996,6 +1996,18 @@ namespace AutoBuddy.Utilities.AutoShop
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
         public override int SellGold => 1470;
+    }
+
+    class _3175 : IItem
+    {
+        public override int BaseGold => 0;
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
+        public override int Id => 3175;
+        public override IEnumerable<int> Maps => new[] { 11 };
+        public override string Name => "Head of Kha'Zix";
+        public override bool Purchaseable => false;
+        public override IEnumerable<Champion> RequiredChampions => new[] { Champion.Rengar };
+        public override int SellGold => 0;
     }
 
     class _3181 : IItem
@@ -2308,6 +2320,54 @@ namespace AutoBuddy.Utilities.AutoShop
         public override bool Purchaseable => true;
         public override IEnumerable<Champion> RequiredChampions => new Champion[] { };
         public override int SellGold => 880;
+    }
+
+    class _3410 : IItem
+    {
+        public override int BaseGold => 0;
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
+        public override int Id => 3410;
+        public override IEnumerable<int> Maps => new[] { 11 };
+        public override string Name => "Head of Kha'Zix";
+        public override bool Purchaseable => false;
+        public override IEnumerable<Champion> RequiredChampions => new[] { Champion.Rengar };
+        public override int SellGold => 0;
+    }
+
+    class _3416 : IItem
+    {
+        public override int BaseGold => 0;
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
+        public override int Id => 3416;
+        public override IEnumerable<int> Maps => new[] { 11 };
+        public override string Name => "Head of Kha'Zix";
+        public override bool Purchaseable => false;
+        public override IEnumerable<Champion> RequiredChampions => new[] { Champion.Rengar };
+        public override int SellGold => 0;
+    }
+
+    class _3422 : IItem
+    {
+        public override int BaseGold => 0;
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
+        public override int Id => 3422;
+        public override IEnumerable<int> Maps => new[] { 8, 10, 12 };
+        public override string Name => "Head of Kha'Zix";
+        public override bool Purchaseable => false;
+        public override IEnumerable<Champion> RequiredChampions => new[] { Champion.Rengar };
+        public override int SellGold => 0;
+    }
+
+    class _3455 : IItem
+    {
+        public override int BaseGold => 0;
+        public override IEnumerable<IItem> BuiltFrom => new IItem[] { };
+        public override int Id => 3455;
+        public override IEnumerable<int> Maps => new[] { 8, 10, 11, 12 };
+        public override string Name => "Head of Kha'Zix";
+        public override bool Purchaseable => false;
+        public override IEnumerable<Champion> RequiredChampions => new[] { Champion.Rengar };
+        public override int SellGold => 0;
     }
 
     class _3460 : IItem

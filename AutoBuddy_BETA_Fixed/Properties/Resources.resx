@@ -118,10 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="NavGraphCrystalScar_Ascension" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphCrystalScar-Ascension;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphCrystalScar_DefinitelyNotDominion" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphCrystalScar-DefinitelyNotDominion;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphHowlingAbyss" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphHowlingAbyss;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="NavGraphSummonersRift" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NavGraphSummonersRift;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="NavGraphSummonersRiftOld" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NavGraphSummonersRiftOld;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphSummonersRift_NexusSiege" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphSummonersRift-NexusSiege;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphTwistedTreeline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphTwistedTreeline;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

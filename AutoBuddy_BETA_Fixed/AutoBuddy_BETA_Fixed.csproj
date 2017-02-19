@@ -136,8 +136,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Resources\NavGraphCrystalScar-Ascension" />
+    <None Include="Resources\NavGraphCrystalScar-DefinitelyNotDominion" />
+    <None Include="Resources\NavGraphHowlingAbyss" />
     <None Include="Resources\NavGraphSummonersRift" />
+    <None Include="Resources\NavGraphSummonersRift-NexusSiege" />
     <None Include="Resources\NavGraphSummonersRiftOld" />
+    <None Include="Resources\NavGraphTwistedTreeline" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

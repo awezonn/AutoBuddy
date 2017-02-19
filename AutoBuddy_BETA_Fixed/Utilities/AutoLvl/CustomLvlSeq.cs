@@ -37,7 +37,7 @@ namespace AutoBuddy.Utilities.AutoLvl
 
         public CustomLvlSeq(Menu m, AIHeroClient champ, string dir, string seq = "", int maxlvl = 18)
         {
-            locked = new bool[] { true };
+            locked = new[] { true };
             this.dir = dir;
             se = seq;
             var menuSettings = m.AddSubMenu("Skill LvlUp", "AB_SL_SETTINGS");
