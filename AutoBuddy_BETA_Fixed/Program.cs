@@ -90,9 +90,9 @@ namespace AutoBuddy
                     sender.DisplayName = lanes[changeArgs.NewValue];
                 };
             var aram = menu.Add("aramCheck", new CheckBox("Disable this in maps that are not Summoner's Rift. F5 to apply."));
-            aram.OnValueChange += (sender, args) =>
+            Action<bool> aramChange = newVal =>
             {
-                if (args.NewValue)
+                if (newVal)
                 {
                     File.Create(loadTextureDir + "disableInOtherMaps");
                 }
@@ -101,6 +101,11 @@ namespace AutoBuddy
                     File.Delete(loadTextureDir + "disableInOtherMaps");
                 }
             };
+            aram.OnValueChange += (sender, args) =>
+            {
+                aramChange(args.NewValue);
+            };
+            aramChange(aram.CurrentValue);
             menu.Add("reselectlane", new CheckBox("Reselect lane", false));
             menu.Add("disablepings", new CheckBox("Disable pings"));
             menu.Add("disablechat", new CheckBox("Disable chat"));

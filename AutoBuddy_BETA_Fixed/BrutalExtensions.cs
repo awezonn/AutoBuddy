@@ -40,15 +40,11 @@ namespace AutoBuddy
             {
                 return "Definitely not Dominion";
             }
-            if (Game.Type == GameType.Tutorial)
-            {
-                return "Tutorial";
-            }
             if (Game.Type == GameType.KingPoro)
             {
                 return "Legend of the Poro King";
             }
-            if (Player.Instance.HasItem(3460, 3461) || Game.Type == GameType.Ascension)
+            if (Player.Instance.HasItem(3460, 3461))
             {
                 return "Ascension";
             }
