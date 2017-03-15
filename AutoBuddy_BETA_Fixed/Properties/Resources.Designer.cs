@@ -93,9 +93,9 @@ namespace AutoBuddy.Properties {
         /// <summary>
         ///   System.Byte[] türünde yerelleştirilmiş bir kaynak arar.
         /// </summary>
-        internal static byte[] NavGraphSummonersRift {
+        internal static byte[] NavGraphSummonersRift_Blue {
             get {
-                object obj = ResourceManager.GetObject("NavGraphSummonersRift", resourceCulture);
+                object obj = ResourceManager.GetObject("NavGraphSummonersRift_Blue", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -103,9 +103,29 @@ namespace AutoBuddy.Properties {
         /// <summary>
         ///   System.Byte[] türünde yerelleştirilmiş bir kaynak arar.
         /// </summary>
-        internal static byte[] NavGraphSummonersRift_NexusSiege {
+        internal static byte[] NavGraphSummonersRift_NexusSiege_Blue {
             get {
-                object obj = ResourceManager.GetObject("NavGraphSummonersRift_NexusSiege", resourceCulture);
+                object obj = ResourceManager.GetObject("NavGraphSummonersRift_NexusSiege_Blue", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] türünde yerelleştirilmiş bir kaynak arar.
+        /// </summary>
+        internal static byte[] NavGraphSummonersRift_NexusSiege_Red {
+            get {
+                object obj = ResourceManager.GetObject("NavGraphSummonersRift_NexusSiege_Red", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] türünde yerelleştirilmiş bir kaynak arar.
+        /// </summary>
+        internal static byte[] NavGraphSummonersRift_Red {
+            get {
+                object obj = ResourceManager.GetObject("NavGraphSummonersRift_Red", resourceCulture);
                 return ((byte[])(obj));
             }
         }

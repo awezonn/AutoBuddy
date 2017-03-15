@@ -79,7 +79,10 @@ namespace AutoBuddy.MainLogics
             }
             if (victim != null)
             {
-                current.myChamp.Combo(victim);
+                if (MainMenu.GetMenu("AB").Get<CheckBox>("toUseOurChampLogic").CurrentValue)
+                {
+                    current.myChamp.Combo(victim);
+                }
                 var vicPos = Prediction.Position.PredictUnitPosition(victim, 500).To3D();
 
                 var posToWalk =
@@ -168,7 +171,10 @@ namespace AutoBuddy.MainLogics
                 }
 
 
-                current.myChamp.Harass(har);
+                if (MainMenu.GetMenu("AB").Get<CheckBox>("toUseOurChampLogic").CurrentValue)
+                {
+                    current.myChamp.Harass(har);
+                }
 
 
                 AutoWalker.WalkTo(harPos);

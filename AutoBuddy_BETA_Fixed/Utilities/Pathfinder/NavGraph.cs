@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using AutoBuddy.Properties;
 using EloBuddy;
 using EloBuddy.SDK;
 using SharpDX;
@@ -12,7 +11,6 @@ namespace AutoBuddy.Utilities.Pathfinder
 {
     internal class NavGraph
     {
-        private Vector3 gate1, gate2;
         public Node[] Nodes;
         public readonly ColorBGRA NodeColor;
         public readonly Color LineColor;
@@ -21,16 +19,6 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         public NavGraph(string dir)
         {
-            if (ObjectManager.Player.Team == GameObjectTeam.Chaos)
-            {
-                gate1 = new Vector3(2685, 4784, 75);
-                gate2 = new Vector3(4813, 2806, 79);
-            }
-            else
-            {
-                gate1 = new Vector3(10018, 12144, 75);
-                gate2 = new Vector3(12078, 10104, 79);
-            }
             navFile = Path.Combine(dir, "NavGraph" + Game.MapId + ".txt");
             NodeColor = new ColorBGRA(50, 200, 0, 255);
             LineColor = Color.Gold;
@@ -40,9 +28,12 @@ namespace AutoBuddy.Utilities.Pathfinder
 
         void Chat_OnInput(ChatInputEventArgs args)
         {
-            if(test!=null||!args.Input.Equals("/navgraph")) return;
+            if (test != null || !args.Input.Equals("/navgraph"))
+            {
+                return;
+            }
             args.Process = false;
-            test=new NavGraphTest(this);
+            test = new NavGraphTest(this);
         
         }
 
@@ -70,8 +61,6 @@ namespace AutoBuddy.Utilities.Pathfinder
                 for (var i = 0; i < Nodes.Length; i++)
                 {
                     Nodes[i]=new Node(f, buffer, this);
-                    Nodes[i].passable = Nodes[i].position.Distance(gate1) > 200 &&
-                                        Nodes[i].position.Distance(gate2) > 200;
                 }
             }
         }
@@ -79,15 +68,13 @@ namespace AutoBuddy.Utilities.Pathfinder
         private void load()
         {
             var buffer = new byte[4];
-            using (var f = new MemoryStream(Resources.NavGraphSummonersRift))
+            using (var f = new MemoryStream(BrutalExtensions.GetResourceForGame()))
             {
                 f.Read(buffer, 0, 4);
                 Nodes = new Node[BitConverter.ToInt32(buffer, 0)];
                 for (var i = 0; i < Nodes.Length; i++)
                 {
                     Nodes[i] = new Node(f, buffer, this);
-                    Nodes[i].passable = Nodes[i].position.Distance(gate1) > 200 &&
-                    Nodes[i].position.Distance(gate2) > 200;
                 }
             }
         }

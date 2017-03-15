@@ -20,16 +20,15 @@ namespace AutoBuddy.MainLogics
         public readonly Surrender surrender;
         public readonly Survi surviLogic;
 
-
         public readonly IChampLogic myChamp;
         public bool saveMylife;
 
-        public LogicSelector(IChampLogic my, Menu menu)
+        public LogicSelector(IChampLogic my)
         {
             myChamp = my;
             current = MainLogics.Nothing;
             surviLogic = new Survi(this);
-            recallLogic = new Recall(this, menu);
+            recallLogic = new Recall(this);
             pushLogic = new Push(this);
             loadLogic = new Load(this);
             combatLogic = new Combat(this);
@@ -64,7 +63,6 @@ namespace AutoBuddy.MainLogics
                 case MainLogics.SurviLogic:
                     surviLogic.Deactivate();
                     break;
-
                 case MainLogics.RecallLogic:
                     recallLogic.Deactivate();
                     break;
@@ -84,7 +82,6 @@ namespace AutoBuddy.MainLogics
                     break;
                 case MainLogics.SurviLogic:
                     surviLogic.Activate();
-
                     break;
                 case MainLogics.RecallLogic:
                     recallLogic.Activate();

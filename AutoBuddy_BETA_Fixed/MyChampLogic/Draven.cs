@@ -38,5 +38,10 @@ namespace AutoBuddy.MyChampLogic
         public void Combo(AIHeroClient target)
         {
         }
+
+        public void UnkillableMinion()
+        {
+            
+        }
     }
 }

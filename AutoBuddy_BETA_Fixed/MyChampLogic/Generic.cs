@@ -1,18 +1,13 @@
 ﻿using AutoBuddy.MainLogics;
 using EloBuddy;
-using EloBuddy.SDK;
 
 namespace AutoBuddy.MyChampLogic
 {
     internal class Generic : IChampLogic
     {
-
-        public float MaxDistanceForAA { get { return int.MaxValue; } }
-        public float OptimalMaxComboDistance { get { return AutoWalker.p.AttackRange; } }
-        public float HarassDistance { get { return AutoWalker.p.AttackRange; } }
-
-        public Spell.Active Q;
-        public Spell.Skillshot W, E, R;
+        public float MaxDistanceForAA => AutoWalker.p.AttackRange;
+        public float OptimalMaxComboDistance => AutoWalker.p.AttackRange;
+        public float HarassDistance => AutoWalker.p.AttackRange;
 
         public Generic()
         {
@@ -37,6 +32,11 @@ namespace AutoBuddy.MyChampLogic
 
         public void Combo(AIHeroClient target)
         {
+        }
+
+        public void UnkillableMinion()
+        {
+            
         }
     }
 }

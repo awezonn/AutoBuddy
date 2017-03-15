@@ -127,14 +127,20 @@
   <data name="NavGraphHowlingAbyss" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NavGraphHowlingAbyss;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="NavGraphSummonersRift" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NavGraphSummonersRift;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="NavGraphSummonersRiftOld" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NavGraphSummonersRiftOld;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="NavGraphSummonersRift_NexusSiege" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\NavGraphSummonersRift-NexusSiege;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="NavGraphSummonersRift_Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphSummonersRift-Blue;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphSummonersRift_NexusSiege_Blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphSummonersRift-NexusSiege-Blue;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphSummonersRift_NexusSiege_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphSummonersRift-NexusSiege-Red;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="NavGraphSummonersRift_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NavGraphSummonersRift-Red;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="NavGraphTwistedTreeline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NavGraphTwistedTreeline;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

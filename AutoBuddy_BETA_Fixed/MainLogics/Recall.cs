@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoBuddy.Utilities.AutoShop;
 using EloBuddy;
@@ -20,15 +21,34 @@ namespace AutoBuddy.MainLogics
         private float lastRecallTime;
         private int recallsWithGold; //TODO repair shop and remove this tempfix
 
-        public Recall(LogicSelector currentLogic, Menu parMenu)
+        public static List<Champion> NoManaChamps = new List<Champion>
         {
-            var menu = parMenu.AddSubMenu("Recall settings", "ergtrh");
-            menu.AddLabel(
-    @"
-Autobuddy will recall only if your HP/MP is lower than the percentage you specified.
-(defaulted to 25% HP/15% MP)
-So you won't lose easy kills just because you have enough gold to buy something.
-            ");
+            Champion.Aatrox,
+            Champion.Akali,
+            Champion.DrMundo,
+            Champion.Garen,
+            Champion.Gnar,
+            Champion.Katarina,
+            Champion.Kennen,
+            Champion.Kled,
+            Champion.LeeSin,
+            Champion.Mordekaiser,
+            Champion.RekSai,
+            Champion.Renekton,
+            Champion.Rengar,
+            Champion.Riven,
+            Champion.Rumble,
+            Champion.Shen,
+            Champion.Shyvana,
+            Champion.Tryndamere,
+            Champion.Vladimir,
+            Champion.Yasuo,
+            Champion.Zac,
+            Champion.Zed
+        };
+
+        public Recall(LogicSelector currentLogic)
+        {
             current = currentLogic;
             foreach (
                 var so in
@@ -55,7 +75,7 @@ So you won't lose easy kills just because you have enough gold to buy something.
                 return;
             }
 
-            if (AutoWalker.p.HealthPercent() < Program.recallHp || AutoWalker.p.ManaPercent() < Program.recallMana)
+            if (AutoWalker.p.HealthPercent() < Program.recallHp || (AutoWalker.p.ManaPercent() < Program.recallMana && !NoManaChamps.Contains(AutoWalker.p.Hero)))
             {
                 current.SetLogic(LogicSelector.MainLogics.RecallLogic);
             }
@@ -86,7 +106,7 @@ So you won't lose easy kills just because you have enough gold to buy something.
         {
             AutoWalker.SetMode(Orbwalker.ActiveModes.Combo);
             if (ObjectManager.Player.Distance(spawn) < 400 && ObjectManager.Player.HealthPercent() > 85 &&
-                (ObjectManager.Player.ManaPercent > 80 || ObjectManager.Player.PARRegenRate <= .0001))
+                (ObjectManager.Player.ManaPercent > 80 || ObjectManager.Player.PARRegenRate <= .0001 || NoManaChamps.Contains(AutoWalker.p.Hero)))
 
                 current.SetLogic(LogicSelector.MainLogics.PushLogic);
             else if (ObjectManager.Player.Distance(spawn) < 2000)
@@ -129,7 +149,8 @@ So you won't lose easy kills just because you have enough gold to buy something.
             if (ObjectManager.Player.Distance(spawn) < 500) return;
             Core.DelayAction(CastRecall2, 300);
         }
-        private void CastRecall2()//Kappa
+
+        private void CastRecall2() //Kappa
         {
             if (ObjectManager.Player.Distance(spawn) < 500)
                 return;

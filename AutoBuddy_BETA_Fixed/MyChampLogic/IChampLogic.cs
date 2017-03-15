@@ -14,5 +14,6 @@ namespace AutoBuddy.MyChampLogic
         void Harass(AIHeroClient target);
         void Survi();
         void Combo(AIHeroClient target);
+        void UnkillableMinion();
     }
 }

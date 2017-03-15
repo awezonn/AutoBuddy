@@ -186,8 +186,11 @@ namespace AutoBuddy.MainLogics
                 if (AutoWalker.p.HealthPercent < 25)
                     AutoWalker.UseHeal();
             }
-            
-            current.myChamp.Survi();
+
+            if (MainMenu.GetMenu("AB").Get<CheckBox>("toUseOurChampLogic").CurrentValue)
+            {
+                current.myChamp.Survi();
+            }
         }
 
         private void DecHits()

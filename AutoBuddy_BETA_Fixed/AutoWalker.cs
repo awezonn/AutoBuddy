@@ -77,7 +77,6 @@ namespace AutoBuddy
             oldOrbwalk();
             Game.OnTick += OnTick;
             Game.OnTick += GameEndHandler;
-            Drawing.OnDraw += Drawing_OnDraw;
         }
 
         private static void GameEndHandler(EventArgs args)
@@ -129,10 +128,10 @@ namespace AutoBuddy
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            Circle.Draw(color,40, Target );
+            Circle.Draw(color,40, Target);
             for (var i = 0; i < PfNodes.Count-1; i++)
             {
-                if(PfNodes[i].IsOnScreen()||PfNodes[i+1].IsOnScreen())
+                if (PfNodes[i].IsOnScreen() || PfNodes[i+1].IsOnScreen())
                     Line.DrawLine(Color.Aqua, 4, PfNodes[i], PfNodes[i+1]);
             }
         

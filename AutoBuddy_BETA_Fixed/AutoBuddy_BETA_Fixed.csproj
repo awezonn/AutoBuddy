@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyChampLogic\Aatrox.cs" />
     <Compile Include="MyChampLogic\Annie.cs" />
     <Compile Include="MyChampLogic\Anivia.cs" />
     <Compile Include="MyChampLogic\Corki.cs" />
@@ -139,16 +140,18 @@
     <None Include="Resources\NavGraphCrystalScar-Ascension" />
     <None Include="Resources\NavGraphCrystalScar-DefinitelyNotDominion" />
     <None Include="Resources\NavGraphHowlingAbyss" />
-    <None Include="Resources\NavGraphSummonersRift" />
-    <None Include="Resources\NavGraphSummonersRift-NexusSiege" />
+    <None Include="Resources\NavGraphSummonersRift-Blue" />
+    <None Include="Resources\NavGraphSummonersRift-NexusSiege-Blue" />
+    <None Include="Resources\NavGraphSummonersRift-NexusSiege-Red" />
+    <None Include="Resources\NavGraphSummonersRift-Red" />
     <None Include="Resources\NavGraphSummonersRiftOld" />
     <None Include="Resources\NavGraphTwistedTreeline" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

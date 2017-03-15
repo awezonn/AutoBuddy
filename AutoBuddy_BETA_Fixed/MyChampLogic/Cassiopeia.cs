@@ -301,5 +301,10 @@ EntityManager.Heroes.Enemies.FirstOrDefault(
                 return damage * AutoWalker.p.Mana / neededMana;
             return damage;
         }
+
+        public void UnkillableMinion()
+        {
+            
+        }
     }
 }

@@ -137,5 +137,10 @@ namespace AutoBuddy.MyChampLogic
                 }
             }
         }
+
+        public void UnkillableMinion()
+        {
+            
+        }
     }
 }

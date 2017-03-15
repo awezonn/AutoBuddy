@@ -1,8 +1,7 @@
-﻿using AutoBuddy.Utilities.AutoLvl;
-using EloBuddy.SDK.Menu;
+﻿using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 
-namespace AutoBuddy.Utilities
+namespace AutoBuddy.Utilities.AutoLvl
 {
     internal class LvlSlider
     {

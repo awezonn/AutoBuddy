@@ -84,5 +84,10 @@ namespace AutoBuddy.MyChampLogic
                 E.Cast(AutoWalker.p);
             }
         }
+
+        public void UnkillableMinion()
+        {
+            
+        }
     }
 }

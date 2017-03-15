@@ -91,5 +91,10 @@ namespace AutoBuddy.MyChampLogic
             if (vic == null) return;
             R.Cast(vic);
         }
+
+        public void UnkillableMinion()
+        {
+            
+        }
     }
 }

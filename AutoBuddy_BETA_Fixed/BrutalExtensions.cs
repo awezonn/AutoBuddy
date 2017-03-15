@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 using AutoBuddy.Humanizers;
+using AutoBuddy.Properties;
 using AutoBuddy.Utilities;
 using AutoBuddy.Utilities.AutoShop;
 using EloBuddy;
@@ -16,26 +17,119 @@ namespace AutoBuddy
 {
     internal static class BrutalExtensions
     {
-        
-        //This was causing AutoBuddy to not load in Medium bot games :/
-        //public static string GetGameType()
-        //{
-
-        //    if (EntityManager.Heroes.Allies.Count < 5 || EntityManager.Heroes.Allies.Count(en=>en.Name.EndsWith(" Bot"))>1)
-        //        return "custom";
-            
-        //    if (EntityManager.Heroes.Enemies.All(en => en.Name.EndsWith(" Bot")))
-        //    {
-        //        return EntityManager.Heroes.Enemies.All(en =>en.SkinId==0) ? "bot_easy" : "bot_intermediate";
-        //    }
-        //    return "normal";
-        //}
-
-
-        public static string GetGameType()
+        private static List<Champion> IntroBots = new List<Champion>
         {
-            return "custom";
+            Champion.Ryze,
+            Champion.Nasus,
+            Champion.Ezreal,
+            Champion.Alistar,
+            Champion.Galio
+        };
+
+        public static string GetGameMode()
+        {
+            /*if (Player.HasBuff("Get this buff name first"))
+            {
+                return "URF";
+            }*/
+            if (Player.Instance.HasItem(3630, 3633, 3645, 3649))
+            {
+                return "Nexus Siege";
+            }
+            if (Player.Instance.HasItem(3462))
+            {
+                return "Definitely not Dominion";
+            }
+            if (Game.Type == GameType.Tutorial)
+            {
+                return "Tutorial";
+            }
+            if (Game.Type == GameType.KingPoro)
+            {
+                return "Legend of the Poro King";
+            }
+            if (Player.Instance.HasItem(3460, 3461) || Game.Type == GameType.Ascension)
+            {
+                return "Ascension";
+            }
+            if (EntityManager.Heroes.Enemies.Count == 6 || EntityManager.Heroes.Allies.Count == 6)
+            {
+                return "Hexakill";
+            }
+            if (EntityManager.Heroes.Enemies.All(x => x.IsBot == 1) ||
+                EntityManager.Heroes.Enemies.All(x => x.Name.ToLower().EndsWith(" bot")))
+            {
+                if (EntityManager.Heroes.Enemies.Any(x => x.SkinId != 0))
+                {
+                    return "Medium Bots";
+                }
+                if (EntityManager.Heroes.Enemies.All(x => IntroBots.Contains(x.Hero)))
+                {
+                    return "Intro Bots";
+                }
+                return "Beginner Bots";
+            }
+            var hero = Champion.Unknown;
+            var first = true;
+            foreach (var ally in EntityManager.Heroes.Allies)
+            {
+                if (first)
+                {
+                    hero = ally.Hero;
+                    first = false;
+                }
+                else
+                {
+                    if (ally.Hero == hero)
+                    {
+                        return "One for All";
+                    }
+                    break;
+                }
+            }
+            return Game.Type.ToString();
         }
+
+        public static byte[] GetResourceForGame()
+        {
+            if (Game.MapId == GameMapId.TwistedTreeline)
+            {
+                return Resources.NavGraphTwistedTreeline;
+            }
+            if (Game.MapId == GameMapId.HowlingAbyss)
+            {
+                return Resources.NavGraphHowlingAbyss;
+            }
+            if (Game.MapId == GameMapId.CrystalScar)
+            {
+                if (GetGameMode() == "Ascension")
+                {
+                    return Resources.NavGraphCrystalScar_Ascension;
+                }
+                if (GetGameMode() == "Definitely not Dominion")
+                {
+                    return Resources.NavGraphCrystalScar_DefinitelyNotDominion;
+                }
+            }
+            if (Game.MapId == GameMapId.SummonersRift)
+            {
+                if (GetGameMode() == "Nexus Siege")
+                {
+                    if (Player.Instance.Team == GameObjectTeam.Order)
+                    {
+                        return Resources.NavGraphSummonersRift_NexusSiege_Blue;
+                    }
+                    return Resources.NavGraphSummonersRift_NexusSiege_Red;
+                }
+                if (Player.Instance.Team == GameObjectTeam.Order)
+                {
+                    return Resources.NavGraphSummonersRift_Blue;
+                }
+                return Resources.NavGraphSummonersRift_Red;
+            }
+            return Resources.NavGraphSummonersRiftOld;
+        }
+
         public static Lane GetLane(this Obj_AI_Minion min)
         {
             try

@@ -88,5 +88,10 @@ namespace AutoBuddy.MyChampLogic
                 W.CastMinimumHitchance(target, 65);
             }
         }
+
+        public void UnkillableMinion()
+        {
+            
+        }
     }
 }
