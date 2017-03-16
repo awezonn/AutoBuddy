@@ -67,6 +67,10 @@ namespace AutoBuddy.Utilities
 
         public float HeroStrength(HeroInfo h)
         {
+            if (h.hero.Hero == Champion.PracticeTool_TargetDummy)
+            {
+                return 0;
+            }
             return h.hero.HealthPercent()*(100 + h.hero.Level*10 + h.kills*5);
         }
 

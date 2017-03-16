@@ -3,6 +3,7 @@ using System.Linq;
 using AutoBuddy.MainLogics;
 using EloBuddy;
 using EloBuddy.SDK;
+using EloBuddy.SDK.Enumerations;
 
 namespace AutoBuddy.MyChampLogic
 {
@@ -18,70 +19,67 @@ namespace AutoBuddy.MyChampLogic
         public int EDamage => (int)(new[] {70,110,150,190,230}[Player.GetSpell(SpellSlot.E).Level + 1] + (Player.Instance.TotalAttackDamage - Player.Instance.BaseAttackDamage) * 0.7f);
         public int RDamage => (int)(new[] {200,300,400}[Player.GetSpell(SpellSlot.R).Level + 1] + Player.Instance.TotalMagicalDamage);
 
+        private static SpellData GetSpellData(SpellSlot slot)
+        {
+            return AutoWalker.p.Spellbook.GetSpell(slot).SData;
+        }
+        public Spell.Skillshot _Q = new Spell.Skillshot(SpellSlot.Q, (uint)GetSpellData(SpellSlot.Q).CastRangeDisplayOverride, SkillShotType.Linear, (int)GetSpellData(SpellSlot.Q).CastTime, (int)GetSpellData(SpellSlot.Q).MissileSpeed, (int)GetSpellData(SpellSlot.Q).LineWidth, DamageType.Physical);
+        public Spell.Active _W = new Spell.Active(SpellSlot.W, (uint)GetSpellData(SpellSlot.W).CastRangeDisplayOverride, DamageType.Physical);
+        public Spell.Skillshot _E = new Spell.Skillshot(SpellSlot.E, (uint)GetSpellData(SpellSlot.E).CastRangeDisplayOverride, SkillShotType.Linear, (int)GetSpellData(SpellSlot.E).CastTime, (int)GetSpellData(SpellSlot.E).MissileSpeed, (int)GetSpellData(SpellSlot.E).LineWidth, DamageType.Physical);
+        public Spell.Active _R = new Spell.Active(SpellSlot.R, (uint)GetSpellData(SpellSlot.R).CastRangeDisplayOverride, DamageType.Magical);
+
         public Aatrox()
         {
             Game.OnUpdate += delegate
             {
-                if (Player.Instance.HealthPercent < 50 && Player.GetSpell(SpellSlot.W).ToggleState == 1)
+                if (Player.Instance.HealthPercent < 50 && _W.Name == "AatroxW2")
                 {
-                    Player.CastSpell(SpellSlot.W);
+                    _W.Cast();
                 }
-                if (Player.Instance.HealthPercent > 50 && Player.GetSpell(SpellSlot.W).ToggleState == 0)
+                if (Player.Instance.HealthPercent > 50 && _W.Name == "AatroxW")
                 {
-                    Player.CastSpell(SpellSlot.W);
+                    _W.Cast();
                 }
             };
         }
 
         public void Harass(AIHeroClient target)
         {
-            var spelldata = Player.GetSpell(SpellSlot.E).SData;
-            if (Player.CanUseSpell(SpellSlot.E) == SpellState.Ready)
+            if (_E.State == SpellState.Ready)
             {
-                var predictedPos = Prediction.Position.PredictUnitPosition(target,
-                        (int)(spelldata.CastTime + Player.Instance.Distance(target) / spelldata.MissileSpeed * 1000))
-                    .To3DWorld();
-                if (predictedPos.Distance(Player.Instance) < spelldata.CastRangeDisplayOverride)
-                {
-                    Player.CastSpell(SpellSlot.E, predictedPos);
-                }
+                _E.CastMinimumHitchance(target, HitChance.High);
             }
         }
 
         public void Survi()
         {
             var closestHero = EntityManager.Heroes.Enemies.OrderBy(x => x.Distance(Player.Instance)).FirstOrDefault();
-            if (closestHero != null)
+            if (closestHero != null && _E.State == SpellState.Ready)
             {
-                Harass(closestHero);
+                _E.CastMinimumHitchance(closestHero, HitChance.High);
+                return;
             }
-            if (Player.CanUseSpell(SpellSlot.Q) == SpellState.Ready)
+            if (_Q.State == SpellState.Ready)
             {
-                Player.CastSpell(SpellSlot.Q, Player.Instance.GetNearestTurret(false).ServerPosition);
+                _Q.Cast(Player.Instance.GetNearestTurret(false).ServerPosition);
             }
         }
 
         public void Combo(AIHeroClient target)
         {
-            Func<SpellSlot, SpellDataInst> GetSpell = Player.GetSpell;
-            if (Player.CanUseSpell(SpellSlot.R) == SpellState.Ready && Player.Instance.CountEnemyChampionsInRange(GetSpell(SpellSlot.R).SData.CastRangeDisplayOverride) >= 2)
+            if (_R.State == SpellState.Ready && Player.Instance.CountEnemyChampionsInRange(_R.Range) >= 2)
             {
-                Player.CastSpell(SpellSlot.R);
+                _R.Cast();
                 return;
             }
-            if (Player.CanUseSpell(SpellSlot.E) == SpellState.Ready)
+            if (_E.State == SpellState.Ready)
             {
-                var predictedPos = Prediction.Position.PredictUnitPosition(target, (int)(GetSpell(SpellSlot.E).SData.CastTime + Player.Instance.Distance(target) / GetSpell(SpellSlot.E).SData.MissileSpeed * 1000)).To3DWorld();
-                if (predictedPos.Distance(Player.Instance) < GetSpell(SpellSlot.E).SData.CastRangeDisplayOverride)
-                {
-                    Player.CastSpell(SpellSlot.E, predictedPos);
-                    return;
-                }
+                _E.CastMinimumHitchance(target, HitChance.High);
+                return;
             }
-            if (Player.CanUseSpell(SpellSlot.Q) == SpellState.Ready &&
-                Player.Instance.Distance(target) < GetSpell(SpellSlot.Q).SData.CastRangeDisplayOverride)
+            if (_Q.State == SpellState.Ready)
             {
-                Player.CastSpell(SpellSlot.Q, Prediction.Position.PredictUnitPosition(target, 400).To3DWorld());
+                _Q.CastMinimumHitchance(target, HitChance.High);
             }
         }
 
@@ -94,9 +92,9 @@ namespace AutoBuddy.MyChampLogic
             var farms = Orbwalker.UnKillableMinionsList;
             foreach (var farm in farms.OrderBy(x => x.Distance(Player.Instance)).ThenBy(x => x.Health))
             {
-                if (Player.Instance.CalculateDamageOnUnit(farm, DamageType.Physical, EDamage) < farm.Health)
+                if (_E.State == SpellState.Ready && Player.Instance.CalculateDamageOnUnit(farm, DamageType.Physical, EDamage) < farm.Health)
                 {
-                    Player.CastSpell(SpellSlot.E, farm.ServerPosition);
+                    _Q.CastMinimumHitchance(farm, HitChance.Medium);
                     return;
                 }
             }
