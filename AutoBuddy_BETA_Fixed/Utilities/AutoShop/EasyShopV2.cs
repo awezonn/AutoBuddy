@@ -94,7 +94,6 @@ namespace AutoBuddy.Utilities.AutoShop
                         {
                             Shop.SellItem(slot); 
                         }
-
                     }
                     else
                     {
@@ -115,25 +114,20 @@ namespace AutoBuddy.Utilities.AutoShop
             }
 
 
-            Core.DelayAction(() =>
-            {
-                if (currentPos == -1) return;
-                var cur = buildElements.Where(b => b.position < currentPos + 2).ToList();
+            if (currentPos == -1) return;
+            var cur = buildElements.Where(b => b.position < currentPos + 2).ToList();
 
-                var hp = cur.Count(e => e.action == ShopActionType.StartHpPot) -
-                         cur.Count(e => e.action == ShopActionType.StopHpPot);
-                if (hp > 0 && !AutoWalker.p.InventoryItems.Any(it => it.Id.IsHealthlyConsumable()))
-                    if (Shop.CanShop)
-                        Shop.BuyItem(ItemId.Health_Potion);
-                else if (hp <= 0)
-                {
-                    var slot = BrutalItemInfo.GetHealtlyConsumableSlot();
-                    if (slot != -1)
-                        if (Shop.CanShop)
-                            Shop.SellItem(slot);
-                }
+            var hp = cur.Count(e => e.action == ShopActionType.StartHpPot) -
+                     cur.Count(e => e.action == ShopActionType.StopHpPot);
+            if (hp > 0 && !AutoWalker.p.InventoryItems.Any(it => it.Id.IsHealthlyConsumable()))
+            if (Shop.CanShop)
+                Shop.BuyItem(ItemId.Health_Potion);
+            else
+            {
+                var slot = BrutalItemInfo.GetHealtlyConsumableSlot();
+                if (slot != -1)
+                    Shop.SellItem(slot);
             }
-                , 150);
 
             Core.DelayAction(Shopping, RandGen.r.Next(600, 1000));
         }

@@ -34,7 +34,7 @@ namespace AutoBuddy.MyChampLogic
         {
         }
 
-        public void UnkillableMinion()
+        public void UnkillableMinion(Obj_AI_Base target, float remainingHealth)
         {
             
         }

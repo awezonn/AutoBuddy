@@ -36,7 +36,7 @@ namespace AutoBuddy.MyChampLogic
         {
             foreach (var enemy in EntityManager.Heroes.Enemies)
             {
-                if (!enemy.IsVisible || enemy.IsDead || enemy.Distance(AutoWalker.p) > 2500) continue;
+                if (!enemy.IsHPBarRendered || enemy.IsDead || enemy.IsZombie || enemy.Distance(AutoWalker.p) > 2500) continue;
 
                 if (AutoWalker.p.CalculateDamageOnUnit(enemy, DamageType.Magical, UltDamage) > enemy.Health)
                     R.CastMinimumHitchance(enemy, HitChance.High);
@@ -89,7 +89,7 @@ namespace AutoBuddy.MyChampLogic
             }
         }
 
-        public void UnkillableMinion()
+        public void UnkillableMinion(Obj_AI_Base target, float remainingHealth)
         {
             
         }

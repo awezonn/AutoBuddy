@@ -302,7 +302,7 @@ EntityManager.Heroes.Enemies.FirstOrDefault(
             return damage;
         }
 
-        public void UnkillableMinion()
+        public void UnkillableMinion(Obj_AI_Base target, float remainingHealth)
         {
             
         }

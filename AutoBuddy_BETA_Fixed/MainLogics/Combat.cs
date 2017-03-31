@@ -118,8 +118,6 @@ namespace AutoBuddy.MainLogics
                     }
                     lastMode = "combo under turret";
                 }
-                Orbwalker.DisableAttacking = current.myChamp.MaxDistanceForAA <
-                                             AutoWalker.p.Distance(victim) + victim.BoundingRadius+10;
                 AutoWalker.SetMode(Orbwalker.ActiveModes.Combo);
                 AutoWalker.WalkTo(posToWalk);
 

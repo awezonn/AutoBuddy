@@ -22,7 +22,7 @@ namespace AutoBuddy
         private static Menu menu;
         private static string loadTextureDir = SandboxConfig.DataDirectory + "AutoBuddy\\";
         private static IChampLogic myChamp;
-        private static LogicSelector Logic { get; set; }
+        public static LogicSelector Logic { get; set; }
         public static Item BlackSpear;
         public static int hpvaluePot;
         public static int recallHp;
@@ -213,7 +213,8 @@ namespace AutoBuddy
                     myChamp = new Ahri();
                     break;
                 case Champion.Akali:
-                    goto default;
+                    myChamp = new Akali();
+                    break;
                 case Champion.Alistar:
                     goto default;
                 case Champion.Amumu:
@@ -538,7 +539,6 @@ namespace AutoBuddy
             try
             {
                 var elobuddyPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "EloBuddy");
-                Console.WriteLine("Path is: " + elobuddyPath);
                 Directory.CreateDirectory(Path.Combine(elobuddyPath, "AutoBuddy"));
                 Directory.CreateDirectory(Path.Combine(elobuddyPath, "AutoBuddy", "Builds"));
                 Directory.CreateDirectory(Path.Combine(elobuddyPath, "AutoBuddy", "Skills"));

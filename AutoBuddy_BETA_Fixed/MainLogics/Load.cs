@@ -30,7 +30,10 @@ namespace AutoBuddy.MainLogics
                 Drawing.OnDraw += Drawing_OnDraw;
             MainMenu.GetMenu("AB").Get<CheckBox>("reselectlane").OnValueChange += Checkbox_OnValueChange;
             MainMenu.GetMenu("AB").Get<Slider>("lane").OnValueChange += Slider_OnValueChange;
-            Orbwalker.OnUnkillableMinion += delegate { c.myChamp.UnkillableMinion(); };
+            Orbwalker.OnUnkillableMinion += (target, args) =>
+            {
+                c.myChamp.UnkillableMinion(target, args.RemainingHealth);
+            };
         }
 
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoBuddy.MainLogics;
 using EloBuddy;
 using EloBuddy.SDK;
@@ -83,20 +82,15 @@ namespace AutoBuddy.MyChampLogic
             }
         }
 
-        public void UnkillableMinion()
+        public void UnkillableMinion(Obj_AI_Base target, float remainingHealth)
         {
             if (!Orbwalker.ModeIsActive(Orbwalker.ActiveModes.LaneClear))
             {
                 return;
             }
-            var farms = Orbwalker.UnKillableMinionsList;
-            foreach (var farm in farms.OrderBy(x => x.Distance(Player.Instance)).ThenBy(x => x.Health))
+            if (_E.State == SpellState.Ready && Player.Instance.CalculateDamageOnUnit(target, DamageType.Physical, EDamage) < remainingHealth)
             {
-                if (_E.State == SpellState.Ready && Player.Instance.CalculateDamageOnUnit(farm, DamageType.Physical, EDamage) < farm.Health)
-                {
-                    _Q.CastMinimumHitchance(farm, HitChance.Medium);
-                    return;
-                }
+                _Q.CastMinimumHitchance(target, HitChance.Medium);
             }
         }
     }

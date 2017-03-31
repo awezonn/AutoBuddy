@@ -17,6 +17,18 @@ namespace AutoBuddy
 {
     internal static class BrutalExtensions
     {
+        public static int FPS;
+        static BrutalExtensions()
+        {
+            Drawing.OnDraw += FPSCounter;
+        }
+
+        private static void FPSCounter(EventArgs args)
+        {
+            FPS++;
+            Core.DelayAction(() => FPS--, 1000);
+        }
+
         private static List<Champion> IntroBots = new List<Champion>
         {
             Champion.Ryze,
@@ -28,6 +40,10 @@ namespace AutoBuddy
 
         public static string GetGameMode()
         {
+            if (Game.IsCustomGame || Game.GameId == 0)
+            {
+                return "Custom Game";
+            }
             /*if (Player.HasBuff("Get this buff name first"))
             {
                 return "URF";
@@ -151,6 +167,11 @@ namespace AutoBuddy
             if (tur.Name[10] == 'C') return Lane.Mid;
             if (tur.Name[10] == 'L') return Lane.Top;
             return Lane.Unknown;
+        }
+
+        public static bool IsChilled(this Obj_AI_Base target)
+        {
+            return target.HasBuff("Chilled");
         }
 
         public static int GetWave(this Obj_AI_Minion min)

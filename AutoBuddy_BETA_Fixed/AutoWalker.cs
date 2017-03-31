@@ -55,8 +55,6 @@ namespace AutoBuddy
 
             Target = ObjectManager.Player.Position;
             Orbwalker.DisableMovement = false;
-
-            Orbwalker.DisableAttacking = false;
             Game.OnUpdate += Game_OnUpdate;
 
             if (!MainMenu.GetMenu("AB").Get<CheckBox>("disableAutoBuddy").CurrentValue)
@@ -121,8 +119,6 @@ namespace AutoBuddy
 
         public static void SetMode(Orbwalker.ActiveModes mode)
         {
-            if (activeMode != Orbwalker.ActiveModes.Combo)
-                Orbwalker.DisableAttacking = false;
             activeMode = mode;
         }
 

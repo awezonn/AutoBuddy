@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MyChampLogic\Aatrox.cs" />
+    <Compile Include="MyChampLogic\Akali.cs" />
     <Compile Include="MyChampLogic\Annie.cs" />
     <Compile Include="MyChampLogic\Anivia.cs" />
     <Compile Include="MyChampLogic\Corki.cs" />
