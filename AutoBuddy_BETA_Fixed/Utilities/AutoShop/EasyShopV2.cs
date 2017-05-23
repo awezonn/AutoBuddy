@@ -52,7 +52,7 @@ namespace AutoBuddy.Utilities.AutoShop
             {
                 if (!myit.Any()) // Run when we have no items
                 {
-                    if (Shop.CanShop)
+                    //if (Shop.CanShop)
                     {
                         Shop.BuyItem(buildElements.First(el => el.position == 1).item.Id);
                     }
@@ -90,7 +90,7 @@ namespace AutoBuddy.Utilities.AutoShop
                     var slot = BrutalItemInfo.GetItemSlot(buildElements.First(el => el.position == currentPos + 2).item.Id);
                     if (slot != -1)
                     {
-                        if (Shop.CanShop)
+                        //if (Shop.CanShop)
                         {
                             Shop.SellItem(slot); 
                         }
@@ -105,7 +105,7 @@ namespace AutoBuddy.Utilities.AutoShop
                 {
                     ShopGlobals.Next = b.item.Name;
                     ShopGlobals.GoldForNextItem = BrutalItemInfo.BuyItemSim(myit, b.item);
-                    if (Shop.CanShop)
+                    //if (Shop.CanShop)
                     {
                         Shop.BuyItem(b.item.Id); 
                     }
@@ -120,7 +120,7 @@ namespace AutoBuddy.Utilities.AutoShop
             var hp = cur.Count(e => e.action == ShopActionType.StartHpPot) -
                      cur.Count(e => e.action == ShopActionType.StopHpPot);
             if (hp > 0 && !AutoWalker.p.InventoryItems.Any(it => it.Id.IsHealthlyConsumable()))
-            if (Shop.CanShop)
+            //if (Shop.CanShop)
                 Shop.BuyItem(ItemId.Health_Potion);
             else
             {

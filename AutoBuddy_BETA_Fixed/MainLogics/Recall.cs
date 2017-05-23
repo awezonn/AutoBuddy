@@ -17,9 +17,7 @@ namespace AutoBuddy.MainLogics
         private readonly Obj_SpawnPoint spawn;
         private bool active;
         private GrassObject g;
-        //private float lastRecallGold;
         private float lastRecallTime;
-        private int recallsWithGold; //TODO repair shop and remove this tempfix
 
         public static List<Champion> NoManaChamps = new List<Champion>
         {
