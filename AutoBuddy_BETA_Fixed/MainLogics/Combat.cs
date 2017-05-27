@@ -138,7 +138,7 @@ namespace AutoBuddy.MainLogics
                     AutoWalker.UseHPot();
                 }
 
-                //if (!Shop.CanShop)
+                if (!Shop.CanShop)
                 {
                     var hppotval = Program.hpvaluePot;
                     if (ObjectManager.Player.HealthPercent() < hppotval)

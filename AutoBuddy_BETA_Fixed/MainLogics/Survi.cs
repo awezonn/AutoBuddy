@@ -96,7 +96,7 @@ namespace AutoBuddy.MainLogics
             {
                 return;
             }                       
-            //if (!Shop.CanShop)
+            if (!Shop.CanShop)
             {
                 var hppotval = Program.hpvaluePot;
                 if (ObjectManager.Player.HealthPercent() < hppotval)

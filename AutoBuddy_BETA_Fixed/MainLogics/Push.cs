@@ -91,7 +91,7 @@ namespace AutoBuddy.MainLogics
 
         private void Game_OnTick(EventArgs args)
         {
-            //if (!Shop.CanShop)
+            if (!Shop.CanShop)
             {
                 var hppotval = Program.hpvaluePot;
                 if (ObjectManager.Player.HealthPercent() < hppotval)
